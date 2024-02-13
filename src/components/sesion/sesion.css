@@ -1,0 +1,25 @@
+/*para profile*/
+.sesion__profile {
+    margin-top: 2rem;
+}
+.title {
+    color: var(--celeste-color);
+}
+
+.sesion__profile input {
+    outline: 1px solid var(--celeste-color);
+    border-radius: 5px;
+    padding:.2rem.4rem;
+    color: gray;
+}
+
+.button-form {
+    padding:.5rem 1rem;
+    border-radius: 5px;
+    background: var(--celeste-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/*para pay*/

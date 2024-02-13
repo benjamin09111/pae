@@ -165,9 +165,10 @@ const Pay = () => {
     setForm1(true);
     setForm2(false);
   }
+  //NO FUNCIOA
   const etapa2 = (e) => {
-    setForm2(false);
-    setForm3(true);
+      setForm2(false);
+      setForm3(true);
   }
   const volveretapa2 = () => {
     setForm2(true);
@@ -245,7 +246,7 @@ const Pay = () => {
                 <div className="flex flex-col gap-4 lg:flex-row lg:justify-center lg:items-center">
                   <div className="form1__contenedor p-4 flex flex-col items-center justify-center gap-2">
                     <label className="text-md font-bold mb-2" htmlFor="opcion1">Embarazo</label>
-                    <label htmlFor="opcion1" className="cursor-pointer flex flex-col items-center justify-center gap-2 cursor-pointer">
+                    <label htmlFor="opcion1" className="cursor-pointer flex flex-col items-center justify-center gap-2">
                       <img src={images.s1} alt="sintoma 1" />
                       <input
                         type="radio"
@@ -305,7 +306,7 @@ const Pay = () => {
                   {temaConsulta === "bebe" && <SintomasBebe json={userInfo} changeState={handleChangeUser} />}
                   {temaConsulta === "postparto" && <SintomasPostparto json={userInfo} changeState={handleChangeUser} />}
 
-                  <p className="text-red-500 text-center">Recuerde marcar sus síntomas</p>
+                  <p className="text-red-500 text-center">{message}</p>
                   <div className="w-full flex gap-4 justify-center">
                     <button className="button-form" onClick={etapa2}>Siguiente</button>
                     <button className="button-form" onClick={volveretapa1}>Volver</button>

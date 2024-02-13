@@ -1,14 +1,15 @@
 import { useState } from "react";
-import "../login/login.css";
+import "./sesion.css";
 
-const Register = ({ state, openLogin, changeState, setRegistrarse }) => {
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
-    const [lastname, setLastName] = useState("");
-    const [age, setAge] = useState("");
-    const [password, setPassword] = useState("");
-
+const Register = ({ setState, style }) => {
     const [showPassword, setShowPassword] = useState(false);
+    const [dataSend, setDataSend] = useState({
+        name: "",
+        lastname: "",
+        age: "",
+        email: "",
+        password: "",
+    });
 
     const handleTogglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -18,17 +19,10 @@ const Register = ({ state, openLogin, changeState, setRegistrarse }) => {
     const [estiloText, setEstiloText] = useState({ color: "black" });
 
     const registrarse = async () => {
-
         setEstiloText({ color: "black" });
         setMessage("Cargando...");
 
-        const data = {
-            name: name,
-            lastname: lastname,
-            age: age,
-            email: email,
-            password: password,
-        };
+        const data = dataSend;
 
         const options = {
             method: 'POST',
@@ -41,8 +35,6 @@ const Register = ({ state, openLogin, changeState, setRegistrarse }) => {
         await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
             .then(response => response.json())
             .then(response => {
-                console.log("Enviado: ", data);
-                console.log("Recibido: ",response);
                 if (response && response.id) {
                     setEstiloText({ color: "blue" });
                     setMessage("Cuenta creada.");
@@ -58,73 +50,73 @@ const Register = ({ state, openLogin, changeState, setRegistrarse }) => {
     };
 
     return (
-        <>
-            <div className="login__container">
-                <h1>Registro</h1>
+        <div className={`flex flex-col items-center justify-center bg-white py-8 rounded-lg text-gray-700 gap-2 ${style}`}>
+            <h4 className="title text-4xl mb-2">Registro</h4>
 
+            <div>
                 <p>Nombre</p>
                 <input
                     type="text"
                     id="name"
                     name="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={dataSend.name}
+                    onChange={(e) => setDataSend({ ...dataSend, name: e.target.value })}
                 />
+            </div>
+            <div>
                 <p>Apellido</p>
                 <input
                     type="text"
                     id="lastname"
                     name="lastname"
-                    value={lastname}
-                    onChange={(e) => setLastName(e.target.value)}
+                    value={dataSend.lastname}
+                    onChange={(e) => setDataSend({...dataSend, lastname: e.target.value})}
                 />
+            </div>
+            <div>
                 <p>Edad</p>
                 <input
                     type="text"
                     id="age"
                     name="age"
-                    value={age}
-                    onChange={(e) => setAge(e.target.value)}
+                    value={dataSend.age}
+                    onChange={(e) => setDataSend({...dataSend, age: e.target.value})}
                 />
+            </div>
+            <div>
                 <p>Email</p>
                 <input
                     type="email"
                     id="email"
                     name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={dataSend.email}
+                    onChange={(e) => setDataSend({...dataSend, email: e.target.value})}
                 />
+            </div>
+            <div>
                 <p>Contraseña</p>
-                <div style={{display: "flex", gap: "4"}}>
+                <div style={{ display: "flex", gap: "4" }}>
                     <input
                         type={showPassword ? 'text' : 'password'}
                         id="password"
                         name="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={dataSend.password}
+                        onChange={(e) => setDataSend({...dataSend, password: e.target.value})}
                     />
-                    <button style={{border: "none", background: "none", cursor: "pointer", marginLeft: ".2rem", textDecoration: "underline"}} onClick={handleTogglePasswordVisibility}>
-                        {showPassword ? 'Ocultar' : 'Mostrar'}
+                    <button className="relative" onClick={handleTogglePasswordVisibility}>
+                        {showPassword ? <span className="absolute left-1 top-0 icon-[mdi--hide-outline]"></span> : <span className="absolute left-1 top-0 icon-[mdi--show-outline]"></span>}
                     </button>
                 </div>
-                <button className="button-login" onClick={registrarse}>
-                    Registrar cuenta
-                </button>
-                <div>
-                    <button
-                    className="invitado-seguir"
-                    onClick={() => {
-                        changeState(false);
-                        openLogin(false);
-                    }}
-                    >Seguir como invitado</button>
-                </div>
-                <p style={estiloText}>{message}</p>
-                <p>Ya tengo una cuenta. <b style={{ textDecoration: "underline", cursor: "pointer" }} onClick={()=>{openLogin(true)}}>Iniciar sesión.</b> </p>
             </div>
-            {state && <div className="overlay__fondo"></div>}
-        </>
-    );
-};
+            <button className="button-form my-4" onClick={registrarse}>
+                Registrar cuenta
+            </button>
 
-export default Register;
+            <p style={estiloText}>{message}</p>
+
+            <p className="underline text-xl" onClick={()=>setState("login")}>Iniciar sesión</p>
+        </div>
+    )
+}
+
+export default Register

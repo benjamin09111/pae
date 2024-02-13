@@ -13,7 +13,7 @@ const Navbar = () => {
     useEffect(() => {
         const token = localStorage.getItem('miToken');
         if (token) {
-            setNickName(localStorage.getItem('username'));
+            setNickName(localStorage.getItem('name'));
         }
     }, [])
     useEffect(() => {
@@ -46,7 +46,7 @@ const Navbar = () => {
                 </Link>
                 <a href='#pros'>Especialistas</a>
                 <Link className='flex gap-1 justify-center items-center' to="/profile">
-                    <span class="icon-[iconamoon--profile-fill] w-12 cursor-pointer text-white text-3xl hover:text-gray-200">
+                    <span className="icon-[iconamoon--profile-fill] w-12 cursor-pointer text-white text-3xl hover:text-gray-200">
                     </span>
                     <p className='hover:text-gray-200'>Mi perfil</p>
                 </Link>
@@ -56,7 +56,7 @@ const Navbar = () => {
                 nickname && (
                     <div className="2xl:flex gap-1 justify-center items-center hidden">
                         <Link to="/profile">
-                            <span class="icon-[iconamoon--profile-fill] w-12 cursor-pointer text-white text-3xl hover:text-gray-200"></span>
+                            <span className="icon-[iconamoon--profile-fill] w-12 cursor-pointer text-white text-3xl hover:text-gray-200"></span>
                         </Link>
                         <p className="text-md text-white">Logeado - <b>{nickname}</b></p>
                         <span onClick={() => {
@@ -97,7 +97,7 @@ const Navbar = () => {
                             </Link>
                             <a href='#pros' onClick={() => setToggleMenu(false)}>Especialistas</a>
                             <Link className='' to="/profile">
-                                <span class="icon-[iconamoon--profile-fill] text-white text-3xl">
+                                <span className="icon-[iconamoon--profile-fill] text-white text-3xl">
                                 </span>
                                 <p>Mi perfil</p>
                             </Link>

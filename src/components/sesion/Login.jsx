@@ -1,7 +1,7 @@
 import { useState } from "react";
-import "./login.css";
+import "./sesion.css";
 
-const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) => {
+const Login = ({setState, style}) => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
 
@@ -29,14 +29,16 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
         await fetch('https://api-dev.mimanualdelbebe.com/api/user/login', options)
             .then(response => response.json())
             .then(response => {
-                console.log(response.user)
+
                 if (response.msg === "Error de credenciales!") {
                     setEstiloText({ color: "red" });
                     setMessage("Error de credenciales.");
+                    return;
+                } else if (user === "" || password === "") {
+                    setEstiloText({ color: "red" });
+                    setMessage("Rellene los campos.");
                 } else if (response.token != "") {
                     const token = response.token
-
-                    //habra que cambiar esto, ahora llegará diferente la data, usuario.algo
                     const usuario = response.user
 
                     //DATA ANTIGUA!
@@ -51,30 +53,24 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
                     //FALTA EDAD
                     //localStorage.setItem('age',usuario.user_email)
 
-                    changeState();
-                    setInvitado(false);
-                    setLogeado(true);
-                    return;
-                } else if (user == "" || password == "") {
-                    setEstiloText({ color: "red" });
-                    setMessage("Rellene los campos.");
+                    setState("");
+                    window.location.reload();
+                    //return;
                 }
                 else {
                     setEstiloText({ color: "red" });
-
                     setMessage("No se ha podido establecer sesión.");
-                    console.log(response)
                 }
-            })
-            .catch(err => {
+            }).catch(err => {
+                console.log(err);
                 setEstiloText({ color: "red" });
-                setMessage("No se ha podido establecer sesión (servidor).");
+                setMessage("Error al conectar con el servidor.");
             });
     };
 
     return (
         <>
-            <div className="login__container flex flex-col items-center justify-center bg-white py-8 rounded-lg text-gray-700 gap-6">
+            <div className={`${style} flex flex-col items-center justify-center bg-white py-8 rounded-lg text-gray-700 gap-6`}>
                 <h4 className="title text-4xl">Inicia sesión</h4>
                 <div>
                     <p>Email</p>
@@ -102,19 +98,8 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
 
                 <p style={estiloText}>{message}</p>
 
-                <button
-                    className="underline"
-                    onClick={() => {
-                        changeState();
-                        setInvitado(true);
-                    }}
-                >
-                    Seguir como invitado
-                </button>
-
-                <a style={{ cursor: "pointer", textDecoration: "underline", fontSize: "1.1rem" }} onClick={openRegister} >Crearme una cuenta</a>
+                <a className="underline text-xl" onClick={()=> setState("register")} >Crearme una cuenta</a>
             </div>
-            {state && <div className="overlay__fondo"></div>}
         </>
     );
 };

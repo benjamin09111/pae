@@ -1,4 +1,4 @@
-import images from "../../assets/sintoms";
+import images from "../../assets/sintoms"
 
 const SintomasContainer = ({ tipo, sintomas, changeState }) => {
     return (
@@ -9,7 +9,11 @@ const SintomasContainer = ({ tipo, sintomas, changeState }) => {
                 <label className="font-bold" htmlFor={`${tipo}${index + 1}`}>{sintoma.label}</label>
             </div>
             <div style={{ width: "100%", height: "150px", overflow: "hidden" }}>
-                <img src={sintoma.image} alt="sintoma" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <img onClick={()=>{
+                    const checkbox = document.getElementById(`${tipo}${index + 1}`);
+                    checkbox.checked = !checkbox.checked;
+                    changeState(checkbox.value, checkbox.checked);
+                }} src={sintoma.image} alt="sintoma" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
             <input
                 type="checkbox"

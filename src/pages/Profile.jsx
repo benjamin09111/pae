@@ -1,56 +1,104 @@
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 import Navbar from "../components/navbar/Navbar"
 import Footer from "../components/Footer"
 import ProfileFoto from "../components/profile/ProfileFoto"
 import Cuppon from "../components/profile/Cupones"
+import Preguntas from "../components/profile/Questions"
+import Login from "../components/sesion/Login"
+import Register from "../components/sesion/Register"
+import Informacion from "../components/profile/Editar"
 import "./profile.css"
+import { Link } from "react-router-dom"
 
 const Profile = () => {
-    const [showCuppon, setShowCuppon] = useState(true);
+    const [state, setState] = useState("");
     const [admin, setAdmin] = useState(true);
+    const [username, setUsername] = useState("");
+
+    const cerrar_sesion = () => {
+        localStorage.removeItem('miToken');
+        window.location.reload();
+    }
+
+    useEffect(() => {
+        const token = localStorage.getItem('miToken');
+        if (token) {
+            setUsername(localStorage.getItem('name'));
+        }
+    }, [])
 
     return (
-        <div className="profile__container">
-            <Navbar />
-            <main className="profile__main">
-                <div className="profile__aside w-1/5 flex flex-col justify-center items-center">
-                    <ProfileFoto imagen="" name="NOMBRE DE USUARIO" />
-                    <div className="w-full flex flex-col justify-center items-center gap-2">
-                        {
-                            admin && (
-                                <p className="text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer">Crear cupones</p>
-                            )
-                        }
-                        <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
-                            <p>Cerrar sesión</p>
-                            <span class="icon-[fluent--presence-blocked-24-regular]"></span>
-                        </p>
-                        <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
-                            Iniciar sesión
-                            <span class="icon-[fluent--presence-blocked-24-regular]"></span>
-                        </p>
-                        <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
-                        Actividades
-                            <span class="icon-[fluent--presence-blocked-24-regular]"></span>
-                        </p>
-                        <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
-                        Consultas
-                            <span class="icon-[fluent--presence-blocked-24-regular]"></span>
-                        </p>
-                        <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
-                        Editar perfil
-                            <span class="icon-[fluent--presence-blocked-24-regular]"></span>
-                        </p>
-                        <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
-                        Preguntas frecuentes
-                            <span class="icon-[fluent--presence-blocked-24-regular]"></span>
-                        </p>
-                    </div>
-                </div>
-                <div className="profile__content">
+        <div className="flex flex-col">
+            <div className="hidden lg:flex">
+                <Navbar />
+            </div>
+            <main className="profile__main overflow-auto flex-col lg:flex-row min-h-screen">
+                <div className="lg:border-r-1 lg:border-custom lg:w-1/5 flex  flex-col justify-center items-center w-full">
+                    <ProfileFoto imagen="" name={username !== "" ? username : "Sin perfil"} />
+
                     {
-                        showCuppon && (
+                        username !== "" ? (
+                            <div className="w-full pt-6 lg:pt-0 flex flex-col justify-center items-center gap-2 lg:border-none border-b-1 border-custom pb-6 lg:pb-0">
+                                {
+                                    admin && (
+                                        <p onClick={() => setState("crear_cupones")} className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline ${state == "crear_cupones" && "text-pink-500"}`}>Crear cupones</p>
+                                    )
+                                }
+
+                                <Link to="/begin"  className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline`}>Realizar consulta</Link>
+
+                                {
+                                    username !== "" && (<p onClick={cerrar_sesion} className="text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline">
+                                        Cerrar sesión
+                                    </p>)
+                                }
+
+                                <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
+                                    Actividades
+                                    <span className="icon-[fluent--presence-blocked-24-regular]"></span>
+                                </p>
+                                <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
+                                    Consultas
+                                    <span className="icon-[fluent--presence-blocked-24-regular]"></span>
+                                </p>
+                                <p onClick={() => setState("informacion")} className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline ${state == "informacion" && "text-pink-500"}`}>
+                                    Información del perfil
+
+                                </p>
+
+                                <p onClick={() => setState("preguntas")} className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline ${state == "preguntas" && "text-pink-500"}`}>
+                                    Preguntas frecuentes
+                                </p>
+                            </div>
+                        ) : (
+                            <p className="text-pink-500 font-semibold hover:underline" onClick={() => setState("login")}>Iniciar sesión</p>
+                        )
+                    }
+                </div>
+                <div className="flex justify-center items-center w-full lg:overflow-y-scroll mt-8 lg:mt-0">
+                    {
+                        state == "login" && (
+                            <Login setState={setState} style="sesion__profile" />
+                        )
+                    }
+                    {
+                        state == "crear_cupones" && (
                             <Cuppon />
+                        )
+                    }
+                    {
+                        state == "register" && (
+                            <Register setState={setState} style="sesion__profile" />
+                        )
+                    }
+                    {
+                        state == "preguntas" && (
+                            <Preguntas />
+                        )
+                    }
+                    {
+                        state == "informacion" && (
+                            <Informacion />
                         )
                     }
                 </div>

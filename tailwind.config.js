@@ -7,7 +7,17 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      borderWidth: {
+        '1': '1px',
+      },
+      borderColor: {
+        'custom': 'rgba(60, 30, 12, 0.277)',
+      },
+      textColor: {
+        'custom': 'rgb(85, 187, 210)',
+      },
+    },
   },
   plugins: [
     // Iconify plugin
