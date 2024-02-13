@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../login/login.css";
+import Captcha from "../ReCaptcha";
 
 const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
     const [email, setEmail] = useState("");
@@ -116,10 +117,11 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                         </button>
                     </div>
                 </div>
+                <Captcha />
                 <button className="button-form my-4" onClick={registrarse}>
                     Registrar cuenta
                 </button>
-
+                
                 <p style={estiloText}>{message}</p>
 
                 <button
