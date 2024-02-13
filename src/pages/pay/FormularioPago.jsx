@@ -23,7 +23,7 @@ const FormularioPago = ({ logeado, login, registrarse, agregarAutomaticaUsuario,
                 console.log(response.user_email);
             })
             .catch(err => {
-                console.log("lol")
+                console.log("Error!")
             });
     }
 

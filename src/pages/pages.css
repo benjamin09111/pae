@@ -42,28 +42,23 @@
 /*thanks*/
 .thanks__container {
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    padding: 0 2rem;
+    padding: 0 .5rem;
 }
 
 .thanks__container h1 {
-    font-size: 5.5rem;
+    font-size: 4.5rem;
     color: var(--celeste-color);
     text-align: center;
 }
 
 .thanks__container p {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: var(--font-color);
     text-align: center;
 }
 
 .thanks__container a {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin-top: .2rem;
     text-decoration: none;
     background: var(--celeste-color);
