@@ -2,11 +2,11 @@ import images from "../../assets/sintoms"
 
 const SintomasContainer = ({ tipo, sintomas, changeState }) => {
     return (
-        <article className="flex flex-col items-center justify-center gap-6 md:flex-row md:flex-wrap md:w-1/2 md:items-start">
+        <article className="flex flex-wrap w-3/4 items-center justify-center gap-6 md:flex-row md:flex-wrap md:items-start">
     {sintomas.map((sintoma, index) => (
         <div className="form1__contenedor p-4 flex flex-col items-center justify-center gap-2" key={index} style={{ height: "15rem", width: "20rem" }}>
             <div>
-                <label className="font-bold" htmlFor={`${tipo}${index + 1}`}>
+                <label className="font-bold flex flex-col items-center justify-center" htmlFor={`${tipo}${index + 1}`}>
                     {sintoma.label}
                     <div style={{ width: "100%", height: "150px", overflow: "hidden" }}>
                 <img src={sintoma.image} alt="sintoma" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
