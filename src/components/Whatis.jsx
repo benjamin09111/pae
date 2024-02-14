@@ -9,11 +9,11 @@ const Whatis = () => {
                 <img src={whatis_doctor} alt="doctor" />
             </div>
             <div className='whatis__content'>
-                <h2>¿Qué es Pregúntale al Experto?</h2>
+                <h2 className="text-center">¿Qué es Pregúntale al Experto?</h2>
                 <p>Te permite consultar especialistas de manera rápida o solicitar una Teleconsulta. Resuelve tus dudas de forma segura, sencilla y confiable.</p>
                 <div className='whatis__check-list'>
-                    <p><FaCheckCircle /> <b>Respuestas a consultas en menos de 3 horas</b></p>
-                    <p><FaCheckCircle /> <b>Teleconsultas de 15 minutos con médicos especialistas</b></p>
+                    <p className="flex gap-2"><FaCheckCircle /> <b>Respuestas a consultas en menos de 3 horas</b></p>
+                    <p className="flex gap-2"><FaCheckCircle /> <b>Teleconsultas de 15 minutos con médicos especialistas</b></p>
                 </div>
                 <div className='whatis__content-buttons'>
                         <Link className='' to='/begin'>

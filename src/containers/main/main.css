@@ -61,31 +61,31 @@
 }
 
 .ct1 {
-    background-image: url("../assets/1.webp");
+    background-image: url("../../assets/1.webp");
     background-position: center;
     background-size: 10rem;
 }
 
 .ct2 {
-    background-image: url("../assets/2.webp");
+    background-image: url("../../assets/2.webp");
     background-position: center;
     background-size: 7rem;
 }
 
 .ct3 {
-    background-image: url("../assets/3.webp");
+    background-image: url("../../assets/3.webp");
     background-position: center;
     background-size: 7rem;
 }
 
 .ct4 {
-    background-image: url("../assets/4.webp");
+    background-image: url("../../assets/4.webp");
     background-position: center;
     background-size: 8.2rem;
 }
 
 .ctX {
-    background-image: url("../assets/nofoto.webp");
+    background-image: url("../../assets/nofoto.webp");
     background-position: center;
     background-size: 8.2rem;
 }

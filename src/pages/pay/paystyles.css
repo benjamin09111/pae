@@ -45,3 +45,12 @@
 .footer-down {
     bottom: 0;
 }
+
+.btnn {
+    margin: 1rem 0;
+    width: 100%;
+}
+
+.formulario__de__pago-h3 {
+    color: rgb(95, 89, 77);
+}

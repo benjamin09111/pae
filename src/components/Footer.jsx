@@ -29,6 +29,7 @@ const Footer = ({estilo=""}) => {
           <a className="hover:underline" href="/">Términos y condiciones</a>
           <a className="hover:underline" href="/">Sobre nosotros</a>
           <p>© Alola Connection Ltda. 2021</p>
+          <p>© Freepik images</p>
         </div>
         <div className='flex flex-wrap flex-col items-center justify-center gap-2 lg:w-1/3'>
           <div><img src={logo1} alt="image" /></div>

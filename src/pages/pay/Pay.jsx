@@ -344,7 +344,7 @@ const Pay = () => {
 
                   <div className="flex flex-col gap-8 justify-center items-center lg:flex-row lg:items-start lg:gap-20">
 
-                    <div className="flex flex-col w-64 gap-2 lg:border rounded lg:p-4">
+                    <div className="flex flex-col justify-between w-64 gap-2 lg:border rounded min-h-64 lg:p-4">
                       <h3 className="title text-xl">Pregúntale al Doctor</h3>
 
                       <div className="flex gap-2">
@@ -357,7 +357,7 @@ const Pay = () => {
                       <button className="bg-celeste p-2 text-white" onClick={changeState1} type="button">Quiero una pregunta</button>
                     </div>
 
-                    <div className="flex flex-col w-64 gap-2 lg:border rounded lg:p-4">
+                    <div className="flex flex-col justify-between w-64 gap-2 lg:border rounded min-h-64 lg:p-4">
                       <h3 className="title text-xl">Teleconsulta</h3>
 
                       <div className="flex gap-2">

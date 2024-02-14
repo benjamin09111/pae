@@ -1,29 +1,43 @@
+.formulario__de__pago {
+    height: 100%;
+}
+
+.formulario__de__pago textarea{
+    resize: none;
+    outline: 1px solid var(--celeste-color);
+    border-radius: 15px;
+    padding: 1rem;
+    color: rgb(134, 134, 134);
+}
+
 .input__container {
     display: flex;
-    flex-direction: column;
-    gap: .2rem;
-    justify-content: center;
+    width: 100%;
     align-items: center;
+    color: white;
 }
+
+.input-container  {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    background: rgba(81, 179, 201, 0.67);
+    height: 3rem;
+    width: 100%;
+}
+
 .input__container input {
-    width: 100%;
+    background: rgba(81, 179, 201, 0.797);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding-left: 1rem;
+    color: rgb(236, 236, 236);
+    height: 3rem;
 }
 
-#birthtype, #birthtypebaby {
-    width: 100%;
-    font-size: 1.05rem;
-    padding: .2rem 0;
-    border: none;
-    outline: 1px solid var(--celeste-color);
-    border-radius: 3px;
+.input__container input:focus {
+    outline: none;
 }
 
-.input__container input[type="text"],  .input__container input[type="date"], .input__container input[type="email"]{
-    padding: .5rem;
-    border: none;
-    outline: 1px solid var(--celeste-color);
-    border-radius: 5px;
-}
 .input__container-save {
     display: flex;
     gap: 1.5rem;
@@ -56,11 +70,6 @@
     gap: .5rem;
 }
 
-.codigo__container h5 {
-    color: var(--celeste-color);
-    font-size: 1.5rem;
-}
-
 .codigo__container input {
     width: 70%;
     outline: 1px solid var(--celeste-color);
@@ -70,7 +79,7 @@
 }
 
 .codigo__container button {
-    padding: 1rem 1.5rem;
+    padding: .3rem .5rem;
     background: rgb(231, 231, 231);
     color: rgb(0, 0, 0);
     border-radius: 5px;
@@ -78,6 +87,7 @@
     outline: none;
     cursor: pointer;
     margin-top: 1rem;
+    width: 100%;
     transition: background .3s ease;
 }
 

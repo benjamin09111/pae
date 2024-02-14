@@ -31,7 +31,7 @@ class Checkout extends Component {
             <React.Fragment>
                 <button
                 type='button'
-                className='btnn border-none w-10/12 md:w-1/3 rounded text-white px-4 py-2'
+                className='btnn bg-pink-500 hover:bg-pink-600 border-none w-10/12 md:w-1/3 rounded text-white px-4 py-2'
                 onClick={this.openCheckout}
                 >
                 Pagar con <b>Epayco</b>

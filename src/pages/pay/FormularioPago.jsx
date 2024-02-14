@@ -1,31 +1,21 @@
 import { useEffect, useState } from "react"
+import embarazo from "../../assets/embarazo_1.webp"
+import bebe from "../../assets/bebe_1.webp"
+import postparto from "../../assets/postparto_1.webp"
 import Checkout from "../../components/epayco/Checkout"
+import Input from "./Input"
 import "./styleform.css"
 
-const FormularioPago = ({ logeado, login, registrarse, agregarAutomaticaUsuario, title, question, precio, setLogin, userInfo, changeUserInfo, changeState, tipo, dataEmbarazo, dataPostparto, dataBebe, changeEmbarazo, changeBebe, changePostparto }) => {
+const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, precio, setLogin, userInfo, changeUserInfo, changeState, tipo, dataEmbarazo, dataPostparto, dataBebe, changeEmbarazo, changeBebe, changePostparto }) => {
 
     const [verificado, setVerificado] = useState(false);
     const [textoCodigo, setTextoCodigo] = useState("");
     const [styleText, setStyleText] = useState("style__text-black");
+    const [name, setName] = useState("");
     const [cuppon, setCuppon] = useState("");
 
-    const call = async()=>{
-        //enviar ID
-        const options = {
-            method: 'GET'
-        };
-        
-        await fetch('https://api-dev.mimanualdelbebe.com/api/users/1153658', options)
-            .then(response => response.json())
-            .then(response => {
-                console.log(response.wp_usermeta[0].meta_value);
-                console.log(response.wp_usermeta[1].meta_value);
-                console.log(response.user_email);
-            })
-            .catch(err => {
-                console.log("Error!")
-            });
-    }
+    //funcion que verifica si es que no ha llegado algo o hay algun error
+    const [messageError, setMessageError] = useState("");
 
     const canjearCodigo = async () => {
         setStyleText("style__text-black")
@@ -35,6 +25,7 @@ const FormularioPago = ({ logeado, login, registrarse, agregarAutomaticaUsuario,
             // Aquí iría tu lógica de llamada al backend y recibir respuesta
             //la variable del cuppon se llama: cuppon
             //debes cambiar con setVerificado cuando se verifique, verificado indica si pueda usar cupón
+            //sacar el timeout por el await
 
             if (verificado) {
                 setStyleText("style__text-blue");
@@ -46,16 +37,11 @@ const FormularioPago = ({ logeado, login, registrarse, agregarAutomaticaUsuario,
         }, 500);
     };
 
-    //funcion que verifica si es que no ha llegado algo o hay algun error
-    const [messageError, setMessageError] = useState("");
-
     useEffect(() => {
         const token = localStorage.getItem('miToken');
 
-        console.log("Trying!")
-        console.log("Logeado es: ", login)
-
         if (token) {
+            setName(localStorage.getItem('name'));
             //agregar Info automática al usuario: email, name, lastname, age
             agregarAutomaticaUsuario("email", localStorage.getItem('email'));
             agregarAutomaticaUsuario("name", localStorage.getItem('name'));
@@ -65,184 +51,138 @@ const FormularioPago = ({ logeado, login, registrarse, agregarAutomaticaUsuario,
     }, [login])
 
     return (
-        <form className="flex flex-col gap-2 justify-center items-center pt-8 relative">
-                <h3 className="title text-3xl text-center">{title}</h3>
+        <form className="formulario__de__pago flex 2xl:flex-row flex-col justify-evenly items-start pt-8 relative w-full">
+
+            <div className="2xl:w-1/3  flex flex-col gap-12">
+                <h3 className="2xl:text-start formulario__de__pago-h3 text-3xl text-center font-semibold">Ficha médica - {tipo === "bebe" ? "Bebé" : tipo === "embarazo" ? "Embarazo" : tipo === "postparto" ? "Postparto" : ""}</h3>
                 <b className="top-1 right-1 absolute text-2xl cursor-pointer" onClick={() => {
                     changeState();
                     setLogin(false);
                 }}>&times;</b>
-
-            {
-                !logeado && (
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="name">Nombre madre</label>
-                        <input type="text" id="name" name="name" value={userInfo.name} onChange={changeUserInfo} required />
-                    </div>
-                )
-            }
-            {
-                !logeado && (
-                    <div className="input__container  w-full md:w-1/2">
-                        <label htmlFor="lastname">Apellido madre</label>
-                        <input type="text" id="lastname" name="lastname" value={userInfo.lastname} onChange={changeUserInfo} required />
-                    </div>
-                )
-            }
-            {
-                !logeado && (
-                    <div className="input__container  w-full md:w-1/2">
-                        <label htmlFor="age">Edad madre</label>
-                        <input type="text" id="age" name="age" value={userInfo.age} onChange={changeUserInfo} required />
-                    </div>
-                )
-            }
-
-            {
-                !logeado && (
-                    <div className="input__container  w-full md:w-1/2">
-                        <label htmlFor="email">Correo madre</label>
-                        <input type="email" name="email" id="email" value={userInfo.email} onChange={changeUserInfo} required />
-                    </div>
-                )
-            }
-
-            {tipo === "embarazo" &&
-                <>
-                    <div className="input__container  w-full md:w-1/2">
-                        <label htmlFor="birthmom">Fecha de nacimiento de la madre</label>
-                        <input type="text" id="birthmom" name="birthmom" value={dataEmbarazo.birthmom} onChange={changeEmbarazo} required />
-                    </div>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="birthdate">Fecha estimada del parto</label>
-                        <input type="text" id="birthdate" name="birthdate" value={dataEmbarazo.birthdate} onChange={changeEmbarazo} required />
-                    </div>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="birthtype">Tipo de embarazo (simple / múltiple)</label>
-                        <input type="text" id="birthtype" name="birthtype" value={dataEmbarazo.birthtype} onChange={changeEmbarazo} required />
-                    </div>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="momheight">Estatura de la madre en cm (opcional)</label>
-                        <input type="text" id="momheight" name="momheight" value={dataEmbarazo.momheight} onChange={changeEmbarazo} />
-                    </div>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="momweight">Peso de la madre en kg (opcional)</label>
-                        <input type="text" id="momweight" name="momweight" value={dataEmbarazo.momweight} onChange={changeEmbarazo} />
-                    </div>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="pregnantbefore">He estado embarazada antes (sí / no)</label>
-                        <input type="text" id="pregnantbefore" name="pregnantbefore" value={dataEmbarazo.pregnantbefore} onChange={changeEmbarazo} />
-
-                    </div>
-                </>
-            }
-
-            {tipo === "bebe" &&
-                <>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="namebaby">Nombre del bebé</label>
-                        <input type="text" id="namebaby" name="namebaby" value={dataBebe.namebaby} onChange={changeBebe} />
-                    </div>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="birthbaby">Fecha de nacimiento del bebé</label>
-                        <input type="text" name="birthbaby" value={dataEmbarazo.birthbaby} onChange={changeBebe} required />
-                    </div>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="birthtypebaby">Tipo de parto (natural / cesárea)</label>
-                        <input type="text" name="birthtype" id="birthtype" value={dataBebe.birthtype} onChange={changeBebe} />
-                    </div>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="babyheight">Estatura del bebé en cm (opcional)</label>
-                        <input type="text" id="babyheight" name="babyheight" value={dataBebe.babyheight} onChange={changeBebe} />
-                    </div>
-                    <div className="input__container w-full md:w-1/2">
-                        <label htmlFor="babyweight">Peso del bebé en kg (opcional)</label>
-                        <input type="text" id="babyweight" name="babyweight" value={dataBebe.babyweight} onChange={changeBebe} />
-                    </div>
-                </>
-            }
-
-            {tipo === "postparto" &&
-                <>
-                    <div className="input__container">
-                        <label htmlFor="lastbirthdate">Fecha último parto</label>
-                        <input type="text" id="lastbirthdate" name="lastbirthdate" value={dataPostparto.lastbirthdate} onChange={changePostparto} required />
-                    </div>
-                    <div className="input__container">
-                        <label htmlFor="birthtype">Tipo de parto</label>
-                        <input type="text" id="birthtype" name="birthtype" value={dataPostparto.birthtype} onChange={changePostparto} required />
-                    </div>
-                    <div className="input__container">
-                        <label htmlFor="babyheight">Estatura del bebé en cm (opcional)</label>
-                        <input type="text" id="babyheight" name="babyheight" value={dataPostparto.babyheight} onChange={changePostparto} />
-                    </div>
-                    <div className="input__container">
-                        <label htmlFor="babyweight">Peso del bebé en kg (opcional)</label>
-                        <input type="text" id="babyweight" name="babyweight" value={dataPostparto.babyweight} onChange={changePostparto} />
-                    </div>
-                    <div className="input__container">
-                        <label htmlFor="pregnantbefore">He estado embarazada antes (sí / no)</label>
-                        <input type="checkbox" id="pregnantbefore" name="pregnantbefore" value={dataPostparto.pregnantbefore} onChange={changePostparto} />
-                    </div>
-                </>
-            }
-
-            {question &&
-                (<div className="contenedorpagar__pregunta">
-                    <h4 className="title text-center text-3xl" >¿Cuál es su pregunta?</h4>
-                    {tipo === "embarazo" &&
-                        (
-                            <input type="text" name="question" placeholder="Ingrese su pregunta" id="question" value={dataEmbarazo.question} onChange={changeEmbarazo} />
-                        )
-                    }
-                    {tipo === "bebe" &&
-                        (
-                            <input type="text" name="question" id="question" value={dataBebe.question} onChange={changeBebe} />
-                        )
-                    }
-
-                    {tipo === "postparto" &&
-                        (
-                            <input type="text" name="question" id="question" value={dataPostparto.question} onChange={changePostparto} />
-                        )
-                    }
-                </div>
-                )}
-            <div className="codigo__container">
-                <h5>Código de invitación</h5>
-                <input
-                    type="text"
-                    name="code"
-                    id="code"
-                    value={cuppon}
-                    onChange={(e) => setCuppon(e.target.value)}
-                />
-                <button type="button" onClick={canjearCodigo}>Canjear código</button>
-                <p className={styleText}>{textoCodigo}</p>
+                <img className="w-full" src={
+                    tipo === "bebe" ? bebe :
+                        tipo === "embarazo" ? embarazo :
+                            tipo === "postparto" ? postparto : ""
+                } alt="imagen" />
             </div>
-            <div className="pagar__buton-container flex flex-col w-full justify-center items-center gap-1">
-                <p>Vas a pagar un total de <b>${verificado ? 0 : precio}</b></p>
-                <p className="underline text-md">Elige tu método de pago: </p>
-                <Checkout precio={verificado ? 0 : precio} title={title} tematica={tipo} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
 
-                <button className="btnn w-10/12 md:w-1/3
-                border-none rounded text-white px-4 py-2" onClick={
-                    () => {
-                        if (verificado) {
-                            //mandar los correos altiro y mandar el cuppón, la variable se llama cuppon
-                            precio = 0;
-                        } else {
-                            setMessageError("No has ingresado un código válido.");
+            <div className="flex mt-6 w-full 2xl:mt-0 justify-center items-center flex-col gap-3 2xl:w-1/3">
+                <h3 className="font-bold text-center mb-6 text-3xl 2xl:text-start formulario__de__pago-h3">{question ? `Información para tu pregunta` : "Información para la teleconsulta"}</h3>
+                {
+                    name === "" && (
+                        <>
+                            <Input name="Nombre madre" userInfo={userInfo.name} changeUserInfo={changeUserInfo} id="name" icon="" />
+
+                            <Input name="Apellido madre" userInfo={userInfo.lastname} changeUserInfo={changeUserInfo} id="lastname" icon="" />
+
+                            <Input name="Edad madre" userInfo={userInfo.age} changeUserInfo={changeUserInfo} id="age" icon="icon-[clarity--email-solid]" />
+                            <Input name="Correo madre" userInfo={userInfo.email} changeUserInfo={changeUserInfo} id="email" icon="" />
+
+                            {
+                                /*
+                                    <Input name="País" userInfo={userInfo.country} changeUserInfo={changeUserInfo} id="country" icon="icon-[mdi--location]" />
+                                */
+                            }
+                        </>
+                    )
+                }
+                {tipo === "embarazo" &&
+                    <>
+                        <Input name="Fecha de nacimiento (madre)" userInfo={dataEmbarazo.birthmom} changeUserInfo={changeEmbarazo} id="birthmom" icon="icon-[clarity--date-solid]" placeholder=""/>
+
+                        <Input name="Fecha estimada del parto" userInfo={dataEmbarazo.birthdate} changeUserInfo={changeEmbarazo} id="birthdate" icon="icon-[clarity--date-solid]" placeholder=""/>
+
+                        <Input name="Semanas de embarazo" userInfo={dataEmbarazo.weeks} changeUserInfo={changeEmbarazo} id="weeks" icon="icon-[clarity--date-solid]" placeholder=""/>
+
+                        <Input name="Tipo de embarazo" userInfo={dataEmbarazo.birthtype} changeUserInfo={changeEmbarazo} id="birthtype" icon="icon-[healthicons--pregnant]" placeholder="(simple / múltiple)" />
+
+                        <Input name="He estado embarazada" userInfo={dataEmbarazo.pregnantbefore} changeUserInfo={changeEmbarazo} id="pregnantbefore" icon="icon-[healthicons--pregnant]" placeholder="sí / no"/>
+                    </>
+                }
+                {tipo === "bebe" &&
+                    <>
+                        <Input name="Fecha de nacimiento (bebé)" userInfo={dataBebe.birthbaby} changeUserInfo={changeBebe} id="birthbaby" icon="icon-[clarity--date-solid]" placeholder="" />
+
+                        <Input name="Estatura del bebé" userInfo={dataBebe.babyheight} changeUserInfo={changeBebe} id="babyheight" icon="icon-[mdi--human-male-height]" placeholder="Centímetros (opcional)"/>
+
+                        <Input name="Peso del bebé" userInfo={dataBebe.babyweight} changeUserInfo={changeBebe} id="babyweight" icon="icon-[material-symbols--weight]" placeholder="Kilogramos (opcional)" />
+                    </>
+                }
+                {tipo === "postparto" &&
+                    <>
+                        <Input name="Fecha último parto" userInfo={dataPostparto.lastbirthdate} changeUserInfo={changePostparto} id="lastbirthdate" icon="icon-[clarity--date-solid]" />
+
+                        <Input name="Tipo de parto" userInfo={dataPostparto.birthtype} changeUserInfo={changePostparto} id="birthtype" icon="icon-[healthicons--pregnant]" />
+
+                        <Input name="He estado embarazada" userInfo={dataPostparto.pregnantbefore} changeUserInfo={changePostparto} id="pregnantbefore" icon="icon-[healthicons--pregnant]" placeholder="sí / no"/>
+                    </>
+                }
+                {question &&
+                    (<div className="contenedorpagar__pregunta">
+                        <h4 className="title text-center text-3xl" >¿Cuál es su pregunta?</h4>
+                        {tipo === "embarazo" &&
+                            (
+                                <textarea name="question" id="question" cols="20" rows="4" value={dataEmbarazo.question} onChange={changeEmbarazo} placeholder="Ingrese su pregunta"></textarea>
+                            )
                         }
-                    }
-                }><p>Pagar con el <b>código</b></p> </button>
+                        {tipo === "bebe" &&
+                            (
+                                <textarea name="question" id="question" cols="20" rows="4" value={dataBebe.question} onChange={changeBebe} placeholder="Ingrese su pregunta"></textarea>
+                            )
+                        }
 
-                <button className="btnn w-10/12 md:w-1/3  border-none rounded text-white px-4 py-2" onClick={
-                    () => {
-                        //boton transbank
-                    }
-                }><p>Pagar con <b>Transbank</b></p> </button>
+                        {tipo === "postparto" &&
+                            (
+                                <textarea name="question" id="question" cols="20" rows="4" value={dataPostparto.question} onChange={changePostparto} placeholder="Ingrese su pregunta"></textarea>
+                            )
+                        }
+                    </div>
+                    )}
+            </div>
 
-                <b style={{ color: "red" }}>{messageError}</b>
+            <div className="2xl:w-1/4 mt-6 2xl:mt-0 pagar__buton-container flex flex-col justify-center items-center w-full gap-4 text-gray-700">
+                <h3 className="formulario__de__pago-h3 font-bold text-3xl text-start">Pago</h3>
+
+                <div className="flex mt-4 flex-col gap-1 w-full items-center justify-center ">
+                    <p>Vas a pagar un total de <b>${verificado ? 0 : precio}</b></p>
+                    <p className="underline text-md">Elige tu método de pago: </p>
+
+                    <button className="btnn bg-pink-500 hover:bg-pink-600 w-10/12 md:w-1/3  border-none rounded text-white px-4 py-2" onClick={
+                        () => {
+                            //boton transbank
+                        }
+                    }><p>Pagar con <b>Transbank</b></p> </button>
+
+                    <Checkout precio={verificado ? 0 : precio} title={title} tematica={tipo} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
+
+                    <div className="codigo__container">
+                        <h5 className="text-md title">Código de invitación</h5>
+                        <input
+                            type="text"
+                            name="code"
+                            id="code"
+                            value={cuppon}
+                            onChange={(e) => setCuppon(e.target.value)}
+                        />
+                        <button type="button" onClick={canjearCodigo}>Canjear código</button>
+                        <p className={styleText}>{textoCodigo}</p>
+                    </div>
+
+                    <button className="btnn bg-pink-500 hover:bg-pink-600 w-10/12 md:w-1/3
+                border-none rounded text-white px-4 py-2" onClick={
+                            () => {
+                                if (verificado) {
+                                    precio = 0;
+                                    //mandar los correos altiro y mandar el cuppón, la variable se llama cuppon
+                                    
+                                } else {
+                                    setMessageError("No has ingresado un código válido.");
+                                }
+                            }
+                        }><p>Pagar con el <b>código</b></p> </button>
+
+                    <b className="text-red-600">{messageError}</b>
+                </div>
             </div>
         </form>
     )

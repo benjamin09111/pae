@@ -297,14 +297,6 @@
     color: var(--celeste-color);
 }
 
-.btnn {
-    background: var(--celeste-color);
-    margin: 1rem 0;
-}
-
-.btnn:hover {
-    background: rgb(2, 132, 136);
-}
 .title__pregunta {
     color: var(--celeste-color);
     text-align: center;

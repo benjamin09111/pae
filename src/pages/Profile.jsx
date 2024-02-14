@@ -45,7 +45,7 @@ const Profile = () => {
                                     )
                                 }
 
-                                <Link to="/begin"  className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline`}>Realizar consulta</Link>
+                                <Link to="/begin" className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline`}>Realizar consulta</Link>
 
                                 {
                                     username !== "" && (<p onClick={cerrar_sesion} className="text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline">
@@ -66,12 +66,20 @@ const Profile = () => {
 
                                 </p>
 
-                                <p onClick={() => setState("preguntas")} className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline ${state == "preguntas" && "text-pink-500"}`}>
+                                {
+                                /*
+                                    <p onClick={() => setState("preguntas")} className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline ${state == "preguntas" && "text-pink-500"}`}>
                                     Preguntas frecuentes
+                                    </p>
+                                */
+                                }
+                                <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
+                                    Preguntas frecuentes
+                                    <span className="icon-[fluent--presence-blocked-24-regular]"></span>
                                 </p>
                             </div>
                         ) : (
-                            <p className="text-pink-500 font-semibold hover:underline" onClick={() => setState("login")}>Iniciar sesión</p>
+                            <p className="text-pink-500 cursor-pointer font-semibold hover:underline" onClick={() => setState("login")}>Iniciar sesión</p>
                         )
                     }
                 </div>
