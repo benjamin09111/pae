@@ -20,6 +20,7 @@ const ReCaptcha = ({setCaptchaOK}) => {
         onChange={recaptchaChange}
         sitekey="6LcXtnApAAAAAM-OniROO8UbKM6jxkeSeI_dpIWq"
         onExpired={recaptchaExpired}
+        hl="es-419"
     />
 </div>
   )
