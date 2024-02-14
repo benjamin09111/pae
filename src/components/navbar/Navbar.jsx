@@ -88,7 +88,7 @@ const Navbar = () => {
                             </button>
                         </div>
                         <ul className='app__navbar-smallscreen-links'>
-                            <Link className='' to='/'>
+                            <Link onClick={() => setToggleMenu(false)} className='' to='/'>
                                 Home
                             </Link>
                             <a href='#whatispae' onClick={() => setToggleMenu(false)}>¿Qué es pregúntale al experto?</a>
@@ -96,7 +96,7 @@ const Navbar = () => {
                                 Consulta
                             </Link>
                             <a href='#pros' onClick={() => setToggleMenu(false)}>Especialistas</a>
-                            <Link className='' to="/profile">
+                            <Link onClick={() => setToggleMenu(false)} className='flex gap-2 justify-center items-center' to="/profile">
                                 <span className="icon-[iconamoon--profile-fill] text-white text-3xl">
                                 </span>
                                 <p>Mi perfil</p>

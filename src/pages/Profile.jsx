@@ -32,7 +32,7 @@ const Profile = () => {
             <div className="hidden lg:flex">
                 <Navbar />
             </div>
-            <main className="profile__main overflow-auto flex-col lg:flex-row min-h-screen">
+            <main className="flex lg:py-0 py-6 flex-col lg:flex-row">
                 <div className="lg:border-r-1 lg:border-custom lg:w-1/5 flex  flex-col justify-center items-center w-full">
                     <ProfileFoto imagen="" name={username !== "" ? username : "Sin perfil"} />
 
@@ -83,7 +83,7 @@ const Profile = () => {
                         )
                     }
                 </div>
-                <div className="flex justify-center items-center w-full lg:overflow-y-scroll mt-8 lg:mt-0">
+                <div className="flex justify-center items-center w-full  overflow-auto mt-8 lg:mt-0">
                     {
                         state == "login" && (
                             <Login setState={setState} style="sesion__profile" />

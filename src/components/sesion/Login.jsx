@@ -65,7 +65,7 @@ const Login = ({setState, style}) => {
 
     return (
         <>
-            <div className={`${style} flex flex-col items-center justify-center bg-white py-8 rounded-lg text-gray-700 gap-6`}>
+            <div className={`${style} lg:my-32 flex flex-col items-center justify-center bg-white py-8 rounded-lg text-gray-700 gap-6`}>
                 <h4 className="title text-4xl">Inicia sesión</h4>
                 <div>
                     <p>Email</p>
