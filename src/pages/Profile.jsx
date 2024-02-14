@@ -33,7 +33,7 @@ const Profile = () => {
                 <Navbar />
             </div>
             <main className="flex lg:py-0 py-6 flex-col lg:flex-row">
-                <div className="lg:border-r-1 lg:border-custom lg:w-1/5 flex  flex-col justify-center items-center w-full">
+                <div className="lg:border-r-1 min-h-96 lg:border-custom lg:w-1/5 flex  flex-col justify-center items-center w-full">
                     <ProfileFoto imagen="" name={username !== "" ? username : "Sin perfil"} />
 
                     {

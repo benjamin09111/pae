@@ -15,7 +15,7 @@ const ReCaptcha = ({setCaptchaOK}) => {
   }
 
   return (
-    <div className="recaptcha">
+    <div className="">
     <ReCAPTCHA
         onChange={recaptchaChange}
         sitekey="6LcXtnApAAAAAM-OniROO8UbKM6jxkeSeI_dpIWq"

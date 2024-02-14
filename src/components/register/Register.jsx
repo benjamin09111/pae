@@ -65,8 +65,8 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
 
     return (
         <>
-            <div className="login__container flex flex-col items-center justify-center bg-white py-8 rounded-lg text-gray-700 gap-2">
-                <h4 className="title text-4xl mb-2">Registro</h4>
+            <div className="login__container flex flex-col items-center justify-center bg-white text-gray-700">
+                <h4 className="title text-4xl mb-2 mt-2">Registro</h4>
 
                 <div>
                     <p>Nombre</p>
@@ -133,7 +133,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                         </button>
                     </div>
                 </div>
-                <div>
+                <div className="mt-4">
                     <Captcha setCaptchaOK={setCaptchaOK} />
                 </div>
                 <button className="button-form my-4" onClick={registrarse}>
@@ -149,7 +149,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                         setRegistrarse(false);
                     }}
                 >Seguir como invitado</button>
-                <p>Ya tengo una cuenta. <b style={{ textDecoration: "underline", cursor: "pointer" }} onClick={openLogin}>Iniciar sesión.</b> </p>
+                <p className="mb-2 text-center">Ya tengo una cuenta. <b style={{ textDecoration: "underline", cursor: "pointer" }} onClick={openLogin}>Iniciar sesión.</b> </p>
             </div>
             {state && <div className="overlay__fondo"></div>}
         </>

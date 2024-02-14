@@ -40,7 +40,7 @@ const Login = ({setState, style}) => {
                 } else if (response.token != "") {
                     const token = response.token
                     const usuario = response.user
-
+                    //cambiar data
                     localStorage.setItem('miToken', token)
                     localStorage.setItem('user', usuario)
                     localStorage.setItem('email', usuario.user_email)
