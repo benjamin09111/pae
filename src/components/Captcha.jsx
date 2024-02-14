@@ -7,14 +7,11 @@ const ReCaptcha = ({setCaptchaOK}) => {
     secretKey: "6LcXtnApAAAAACy05Mk3yjaUWslVu9WjdwY3UvlY"
     //remplazar por claves propias
   }
-  
-  
-  const start = Date.now();
-
+  const start = Date.now(); //para controlar el tiempo de expiración del captcha
   const recaptchaChange = (value) => {
     setCaptchaOK(value ? true : false);
   };
-  
+
   const recaptchaExpired = () => {
     const end = Date.now();
     if (end - start < 60000) {
