@@ -13,6 +13,7 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
     const [styleText, setStyleText] = useState("style__text-black");
     const [name, setName] = useState("");
     const [cuppon, setCuppon] = useState("");
+    const [formReady, setFormReady] = useState(true);
 
     //funcion que verifica si es que no ha llegado algo o hay algun error
     const [messageError, setMessageError] = useState("");
@@ -147,14 +148,16 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                     <p>Vas a pagar un total de <b>${verificado ? 0 : precio}</b></p>
                     <p className="underline text-md">Elige tu método de pago: </p>
 
+                    <b className="text-red-600">{messageError}</b>
+
                     <button className="btnn bg-pink-500 hover:bg-pink-600 w-10/12 md:w-1/3  border-none rounded text-white px-4 py-2" onClick={
                         () => {
                             //boton transbank
                         }
                     }><p>Pagar con <b>Transbank</b></p> </button>
 
-                    <Checkout precio={verificado ? 0 : precio} title={title} tematica={tipo} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
-
+                    <Checkout tipo={tipo} setMessageError={setMessageError} precio={verificado ? 0 : precio} title={title} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
+                    
                     <div className="codigo__container">
                         <h5 className="text-md title">Código de invitación</h5>
                         <input
@@ -181,7 +184,7 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                             }
                         }><p>Pagar con el <b>código</b></p> </button>
 
-                    <b className="text-red-600">{messageError}</b>
+                    
                 </div>
             </div>
         </form>

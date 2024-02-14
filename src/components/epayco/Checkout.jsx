@@ -10,20 +10,35 @@ class Checkout extends Component {
             test: true
         });
 
-        const { title, precio, question, userInfo, dataSend } = this.props;
+        const execute = () => {
+            let data = {
+                name: title,
+                description: `Servicio temática ${question ? "PREGUNTA" : "TELECONSULTA"}`,
+                currency: "usd",
+                amount: precio,
+                country: "co",
+                confirmation: "https://api-dev.mimanualdelbebe.com/api/pae/confirmation",
+                response: "",
+                extra1: JSON.stringify(userInfo),
+                extra2: JSON.stringify(dataSend)
+            };
+            handler.open(data);
+        }
 
-        let data = {
-            name: title,
-            description: `Servicio temática ${question ? "PREGUNTA" : "TELECONSULTA"}`,
-            currency: "usd",
-            amount: precio,
-            country: "co",
-            confirmation: "https://api-dev.mimanualdelbebe.com/api/pae/confirmation",
-            response: "",
-            extra1: JSON.stringify(userInfo),
-            extra2: JSON.stringify(dataSend)
-        };
-        handler.open(data);
+        var pass1, pass2;
+
+        const { title, precio, question, tipo, userInfo, dataSend, setMessageError } = this.props;
+
+        pass1 = (Object.values(dataSend).some(value => value === ""));
+
+        pass2 = (Object.values(userInfo).some(value => value === ""));
+
+        if(!pass1 && !pass2){
+            execute();
+        }else{
+            setMessageError("Debe completar los campos.");
+            console.log("Pass1: ", pass1, " Pass2: ", pass2, " Tipo: ", tipo)
+        }
     }
 
     render() {

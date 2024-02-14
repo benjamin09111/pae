@@ -64,9 +64,8 @@ const Pay = () => {
   const [dataEmbarazo, setDataEmbarazo] = useState({
     birthmom: "",
     birthdate: "",
+    weeks: "",
     birthtype: "",
-    momheight: "",
-    momweight: "",
     pregnantbefore: "",
     question: ""
   });
@@ -80,9 +79,7 @@ const Pay = () => {
   };
   //info extra de tipo bebe
   const [dataBebe, setDataBebe] = useState({
-    namebaby: "",
     birthbaby: "",
-    birthtype: "",
     babyheight: "",
     babyweight: "",
     question: ""
@@ -101,8 +98,6 @@ const Pay = () => {
   const [dataPostparto, setDatapostparto] = useState({
     lastbirthdate: "",
     birthtype: "",
-    babyheight: "",
-    babyweight: "",
     pregnantbefore: "",
     question: ""
   });
@@ -165,10 +160,15 @@ const Pay = () => {
     setForm1(true);
     setForm2(false);
   }
-  //NO FUNCIOA
-  const etapa2 = (e) => {
-      setForm2(false);
-      setForm3(true);
+
+  const etapa2 = () => {
+    console.log(userInfo);
+      if(userInfo.sintoms.length > 0){
+        setForm2(false);
+        setForm3(true);
+      }else{
+        setMessage("Debe seleccionar al menos un síntoma.");
+      }
   }
   const volveretapa2 = () => {
     setForm2(true);

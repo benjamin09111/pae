@@ -26,8 +26,8 @@ const Footer = ({estilo=""}) => {
         <div className='content flex gap-3 lg:gap-0 flex-col justify-center lg:items-center items-start lg:w-1/3'>
           <p>Información confiable para mujeres gestantes y con niños en edad pediátrica</p>
           <p><b>Contacto:</b> contáctanos @mimanualdelbebe.com</p>
-          <a className="hover:underline" href="/">Términos y condiciones</a>
-          <a className="hover:underline" href="/">Sobre nosotros</a>
+          <a target="_blank" className="hover:underline" href="https://mimanualdelbebe.com/terminos-y-condiciones/">Términos y condiciones</a>
+          <a target="_blank" className="hover:underline" href="https://mimanualdelbebe.com/quienes-somos/">Sobre nosotros</a>
           <p>© Alola Connection Ltda. 2021</p>
           <p>© Freepik images</p>
         </div>

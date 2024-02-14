@@ -6,15 +6,13 @@ const SintomasContainer = ({ tipo, sintomas, changeState }) => {
     {sintomas.map((sintoma, index) => (
         <div className="form1__contenedor p-4 flex flex-col items-center justify-center gap-2" key={index} style={{ height: "15rem", width: "20rem" }}>
             <div>
-                <label className="font-bold" htmlFor={`${tipo}${index + 1}`}>{sintoma.label}</label>
+                <label className="font-bold" htmlFor={`${tipo}${index + 1}`}>
+                    {sintoma.label}
+                    <div style={{ width: "100%", height: "150px", overflow: "hidden" }}>
+                <img src={sintoma.image} alt="sintoma" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div></label>
             </div>
-            <div style={{ width: "100%", height: "150px", overflow: "hidden" }}>
-                <img onClick={()=>{
-                    const checkbox = document.getElementById(`${tipo}${index + 1}`);
-                    checkbox.checked = !checkbox.checked;
-                    changeState(checkbox.value, checkbox.checked);
-                }} src={sintoma.image} alt="sintoma" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            </div>
+            
             <input
                 type="checkbox"
                 id={`${tipo}${index + 1}`}
