@@ -1,7 +1,9 @@
 import { useState } from "react";
+import Captcha from "../Captcha";
 import "./sesion.css";
 
 const Register = ({ setState, style }) => {
+    const [captchaOK, setCaptchaOK] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [dataSend, setDataSend] = useState({
         name: "",
@@ -33,7 +35,8 @@ const Register = ({ setState, style }) => {
             body: JSON.stringify(data)
         };
 
-        await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
+        if(captchaOK){
+            await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
             .then(response => response.json())
             .then(response => {
                 if (response && response.id) {
@@ -48,6 +51,10 @@ const Register = ({ setState, style }) => {
                 setEstiloText({ color: "red" });
                 setMessage("No se ha podido crear la cuenta (servidor).");
             });
+        }else{
+            setEstiloText({ color: "red" });
+            setMessage("Complete el Captcha.");
+        }
     };
 
     return (
@@ -100,8 +107,8 @@ const Register = ({ setState, style }) => {
                     type="text"
                     id="country"
                     name="country"
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
+                    value={dataSend.country}
+                    onChange={(e) => setDataSend(e.target.value)}
                 />
             </div>
             <div>
@@ -118,6 +125,9 @@ const Register = ({ setState, style }) => {
                         {showPassword ? <span className="absolute left-1 top-0 icon-[mdi--hide-outline]"></span> : <span className="absolute left-1 top-0 icon-[mdi--show-outline]"></span>}
                     </button>
                 </div>
+            </div>
+            <div>
+                <Captcha setCaptchaOK={setCaptchaOK} />
             </div>
             <button className="button-form my-4" onClick={registrarse}>
                 Registrar cuenta

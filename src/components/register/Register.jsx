@@ -1,7 +1,9 @@
 import { useState } from "react";
+import Captcha from "../Captcha";
 import "../login/login.css";
 
 const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
+    const [captchaOK, setCaptchaOK] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
@@ -39,23 +41,26 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
             body: JSON.stringify(data)
         };
 
-        await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
-            .then(response => response.json())
-            .then(response => {
-                console.log("Enviado: ", data);
-                console.log("Recibido: ", response);
-                if (response && response.id) {
-                    setEstiloText({ color: "blue" });
-                    setMessage("Cuenta creada.");
-                } else {
+        if (captchaOK) {
+            await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
+                .then(response => response.json())
+                .then(response => {
+                    if (response && response.id) {
+                        setEstiloText({ color: "blue" });
+                        setMessage("Cuenta creada.");
+                    } else {
+                        setEstiloText({ color: "red" });
+                        setMessage("No se ha podido crear la cuenta.");
+                    }
+                })
+                .catch(err => {
                     setEstiloText({ color: "red" });
-                    setMessage("No se ha podido crear la cuenta.");
-                }
-            })
-            .catch(err => {
-                setEstiloText({ color: "red" });
-                setMessage("No se ha podido crear la cuenta (servidor).");
-            });
+                    setMessage("No se ha podido crear la cuenta (servidor).");
+                });
+        } else {
+            setEstiloText({ color: "red" });
+            setMessage("Complete el Captcha.");
+        }
     };
 
     return (
@@ -127,6 +132,9 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                             {showPassword ? <span className="absolute left-1 top-0 icon-[mdi--hide-outline]"></span> : <span className="absolute left-1 top-0 icon-[mdi--show-outline]"></span>}
                         </button>
                     </div>
+                </div>
+                <div>
+                    <Captcha setCaptchaOK={setCaptchaOK} />
                 </div>
                 <button className="button-form my-4" onClick={registrarse}>
                     Registrar cuenta
