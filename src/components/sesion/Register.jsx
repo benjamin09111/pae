@@ -5,6 +5,7 @@ import "./sesion.css";
 const Register = ({ setState, style }) => {
     const [captchaOK, setCaptchaOK] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
     const [dataSend, setDataSend] = useState({
         name: "",
         lastname: "",
@@ -27,6 +28,8 @@ const Register = ({ setState, style }) => {
 
         const data = dataSend;
 
+        console.log(data);
+
         const options = {
             method: 'POST',
             headers: {
@@ -39,7 +42,7 @@ const Register = ({ setState, style }) => {
             await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
                 .then(response => response.json())
                 .then(response => {
-                    if (response && response.id) {
+                    if (response.id) {
                         setEstiloText({ color: "blue" });
                         setMessage("Cuenta creada.");
                     } else {
@@ -69,7 +72,7 @@ const Register = ({ setState, style }) => {
                             type="text"
                             id="name"
                             name="name"
-                            value={dataSend.name}
+                            value={dataSend["name"]}
                             onChange={(e) => setDataSend({ ...dataSend, name: e.target.value })}
                         />
                     </div>
@@ -79,7 +82,7 @@ const Register = ({ setState, style }) => {
                             type="text"
                             id="lastname"
                             name="lastname"
-                            value={dataSend.lastname}
+                            value={dataSend["lastname"]}
                             onChange={(e) => setDataSend({ ...dataSend, lastname: e.target.value })}
                         />
                     </div>
@@ -89,7 +92,7 @@ const Register = ({ setState, style }) => {
                             type="text"
                             id="age"
                             name="age"
-                            value={dataSend.age}
+                            value={dataSend["age"]}
                             onChange={(e) => setDataSend({ ...dataSend, age: e.target.value })}
                         />
                     </div>
@@ -99,7 +102,7 @@ const Register = ({ setState, style }) => {
                             type="email"
                             id="email"
                             name="email"
-                            value={dataSend.email}
+                            value={dataSend["email"]}
                             onChange={(e) => setDataSend({ ...dataSend, email: e.target.value })}
                         />
                     </div>
@@ -109,8 +112,8 @@ const Register = ({ setState, style }) => {
                             type="text"
                             id="country"
                             name="country"
-                            value={dataSend.country}
-                            onChange={(e) => setDataSend(e.target.value)}
+                            value={dataSend["country"]}
+                            onChange={(e) => setDataSend({ ...dataSend, country: e.target.value })}
                         />
                     </div>
                     <div>
@@ -120,7 +123,7 @@ const Register = ({ setState, style }) => {
                                 type={showPassword ? 'text' : 'password'}
                                 id="password"
                                 name="password"
-                                value={dataSend.password}
+                                value={dataSend["password"]}
                                 onChange={(e) => setDataSend({ ...dataSend, password: e.target.value })}
                             />
                             <button className="relative" onClick={handleTogglePasswordVisibility}>

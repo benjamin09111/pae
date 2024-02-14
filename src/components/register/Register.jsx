@@ -45,7 +45,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
             await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
                 .then(response => response.json())
                 .then(response => {
-                    if (response && response.id) {
+                    if (response.id) {
                         setEstiloText({ color: "blue" });
                         setMessage("Cuenta creada.");
                     } else {
@@ -86,16 +86,6 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                         name="lastname"
                         value={lastname}
                         onChange={(e) => setLastName(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <p>Edad</p>
-                    <input
-                        type="text"
-                        id="age"
-                        name="age"
-                        value={age}
-                        onChange={(e) => setAge(e.target.value)}
                     />
                 </div>
                 <div>

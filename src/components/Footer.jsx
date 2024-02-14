@@ -12,8 +12,9 @@ const Footer = ({estilo=""}) => {
       <div className='flex w-full justify-center items-center'>
         <div className='h-1 hidden 2xl:block w-1/3 bg-neutral-900'></div>
         <div className='flex 2xl:w-1/3 flex-wrap md:flex-nowrap 2xl:justify-between items-center justify-center'>
+        <img className='w-32' src={img2} alt="image-2" />
           <img className='w-64' src={img1} alt="image-1" />
-          <img className='w-32' src={img2} alt="image-2" />
+          
           <img className='w-32' src={img3} alt="image-3" />
         </div>
         <div className='h-1 hidden 2xl:block w-1/3 bg-neutral-900'></div>

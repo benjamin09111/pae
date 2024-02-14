@@ -37,18 +37,13 @@ const Login = ({setState, style}) => {
                 } else if (user === "" || password === "") {
                     setEstiloText({ color: "red" });
                     setMessage("Rellene los campos.");
-                } else if (response.token != "") {
+                } else if (response.id != "") {
                     const token = response.token
-                    const usuario = response.user
-                    //cambiar data
-                    localStorage.setItem('miToken', token)
-                    localStorage.setItem('user', usuario)
-                    localStorage.setItem('email', usuario.user_email)
-                    localStorage.setItem('name', usuario.user_name)
-                    localStorage.setItem('lastname', usuario.user_lastname)
-                    localStorage.setItem('age',usuario.user_age)
-                    localStorage.setItem('country',usuario.user_country)
-
+                    const user_id = response.user.id
+    
+                    localStorage.setItem('miToken', JSON.stringify(token));
+                    localStorage.setItem('user_id', JSON.stringify(user_id));
+                
                     setState("");
                     window.location.reload();
                 }

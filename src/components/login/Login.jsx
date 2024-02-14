@@ -29,21 +29,16 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
         await fetch('https://api-dev.mimanualdelbebe.com/api/user/login', options)
             .then(response => response.json())
             .then(response => {
-                console.log(response.user)
+                console.log("Te responde: ", response.user)
                 if (response.msg === "Error de credenciales!") {
                     setEstiloText({ color: "red" });
                     setMessage("Error de credenciales.");
                 } else if (response.token != "") {
                     const token = response.token
-                    const usuario = response.user
-
+                    const user_id = response.user.id
+    
                     localStorage.setItem('miToken', token)
-                    localStorage.setItem('user', usuario)
-                    localStorage.setItem('email', usuario.user_email)
-                    localStorage.setItem('name', usuario.user_name)
-                    localStorage.setItem('lastname', usuario.user_lastname)
-                    localStorage.setItem('age',usuario.user_age)
-                    localStorage.setItem('country',usuario.user_country)
+                    localStorage.setItem('user_id', user_id)
 
                     changeState();
                     setInvitado(false);

@@ -320,13 +320,11 @@ const Pay = () => {
                   {
                     nickname !== "" ?
                       (<div className="text-center text-profile shadow mt-2 p-4 rounded border-celeste text-gray-700 flex flex-col gap-2 lg:w-1/3">
-                        <h5 className="text-xl  title">Información del perfil</h5>
-                        <p className="text-left"><b>Nombre</b>: {nickname}</p>
-                        <p className="text-left"><b>Apellido</b>: {lastname}</p>
-                        <p className="text-left"><b>Email</b>: {email}</p>
+                        <h5 className="text-xl text-center  title">Logeado</h5>
+                        <p className="text-center"><b>Email</b>: {email}</p>
 
                         <div className="lg:items-center">
-                          <button className="lg:w-1/2 mt-4 rounded bg-celeste text-white" onClick={() => {
+                          <button className="lg:w-1/2 p-2 mt-4 rounded w-full  bg-celeste text-white" onClick={() => {
                             localStorage.removeItem('miToken');
                             window.location.reload();
                           }}>Click aquí para cerrar sesión</button>

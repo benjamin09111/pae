@@ -13,7 +13,16 @@ import { Link } from "react-router-dom"
 const Profile = () => {
     const [state, setState] = useState("");
     const [admin, setAdmin] = useState(true);
-    const [username, setUsername] = useState("");
+
+    const [dataUser, setDataUser] = useState({
+        nombre: "",
+        apellido: "",
+        age: "Desconocido",
+        email: "",
+        country: ""
+    });
+
+    const [user_id, setUserId] = useState("");
 
     const cerrar_sesion = () => {
         localStorage.removeItem('miToken');
@@ -23,7 +32,7 @@ const Profile = () => {
     useEffect(() => {
         const token = localStorage.getItem('miToken');
         if (token) {
-            setUsername(localStorage.getItem('name'));
+            setUserId(localStorage.getItem('user_id'));
         }
     }, [])
 
@@ -33,11 +42,64 @@ const Profile = () => {
                 <Navbar />
             </div>
             <main className="flex lg:py-0 py-6 flex-col lg:flex-row">
-                <div className="lg:border-r-1 min-h-96 lg:border-custom lg:w-1/5 flex  flex-col justify-center items-center w-full">
-                    <ProfileFoto imagen="" name={username !== "" ? username : "Sin perfil"} />
+                <div className="lg:border-r-1 h-128 mt-16 lg:border-custom lg:w-1/5 flex  flex-col justify-center items-center w-full">
+                    <ProfileFoto imagen="" name={dataUser["nombre"] !== "" ? dataUser["nombre"] : "Sin perfil"} />
+                    <button onClick={
+                        async()=> {
+                            const token = localStorage.getItem("miToken").slice(1, localStorage.getItem("miToken").length-1);
 
+                            const options = {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        "Authorization": token
+                                    }
+                            };
+                        
+                                await fetch('https://api-dev.mimanualdelbebe.com/api/user/me', options)
+                                    .then(response => response.json())
+                                    .then(response => {
+                                        if(response.msg == "token no es válido"){
+                                            setState("vuelva");
+                                        }else{
+                                            setDataUser(prevState => ({
+                                                ...prevState,
+                                                nombre: response.wp_usermeta["wpcf_f_name"]
+                                            }));
+
+                                            setDataUser(prevState => ({
+                                                ...prevState,
+                                                nombre: response.wp_usermeta["wpcf_f_name"]
+                                            }));
+
+                                            setDataUser(prevState => ({
+                                                ...prevState,
+                                                email: response.user_email
+                                            }));
+
+                                            setDataUser(prevState => ({
+                                                ...prevState,
+                                                country: response.wp_usermeta["wpcf_country"]
+                                            }));
+
+                                            setDataUser(prevState => ({
+                                                ...prevState,
+                                                age: response.wp_usermeta["wpcf_age"]
+                                            }));
+
+                                            setDataUser(prevState => ({
+                                                ...prevState,
+                                                apellido: response.wp_usermeta["wpcf_l_name"]
+                                            }));
+                                        }
+                                    }).catch(err => {
+                                        console.log(err);
+                                    });
+                            
+                        }
+                    }>Traer Data</button>
                     {
-                        username !== "" ? (
+                        user_id !== "" ? (
                             <div className="w-full pt-6 lg:pt-0 flex flex-col justify-center items-center gap-2 lg:border-none border-b-1 border-custom pb-6 lg:pb-0">
                                 {
                                     admin && (
@@ -48,7 +110,7 @@ const Profile = () => {
                                 <Link to="/begin" className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline`}>Realizar consulta</Link>
 
                                 {
-                                    username !== "" && (<p onClick={cerrar_sesion} className="text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline">
+                                    user_id !== "" && (<p onClick={cerrar_sesion} className="text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline">
                                         Cerrar sesión
                                     </p>)
                                 }
@@ -90,8 +152,15 @@ const Profile = () => {
                         )
                     }
                     {
+                        state == "vuelva" && (
+                            <div className="flex items-center justify-center text-center text-red-500">
+                                Por favor, cierre sesión y vuelva a iniciar.
+                            </div>
+                        )
+                    }
+                    {
                         state == "crear_cupones" && (
-                            <Cuppon />
+                            <Cuppon changeState={setState}/>
                         )
                     }
                     {
@@ -106,7 +175,7 @@ const Profile = () => {
                     }
                     {
                         state == "informacion" && (
-                            <Informacion />
+                            <Informacion dataUser={dataUser} />
                         )
                     }
                 </div>

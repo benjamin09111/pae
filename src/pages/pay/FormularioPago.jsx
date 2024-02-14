@@ -4,6 +4,7 @@ import bebe from "../../assets/bebe_1.webp"
 import postparto from "../../assets/postparto_1.webp"
 import Checkout from "../../components/epayco/Checkout"
 import Input from "./Input"
+import Transbank from "../../components/Transbank"
 import "./styleform.css"
 
 const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, precio, setLogin, userInfo, changeUserInfo, changeState, tipo, dataEmbarazo, dataPostparto, dataBebe, changeEmbarazo, changeBebe, changePostparto }) => {
@@ -83,22 +84,22 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                 }
                 {tipo === "embarazo" &&
                     <>
-                        <Input name="Fecha de nacimiento (madre)" userInfo={dataEmbarazo.birthmom} changeUserInfo={changeEmbarazo} id="birthmom" icon="icon-[clarity--date-solid]" placeholder=""/>
+                        <Input name="Fecha de nacimiento (madre)" userInfo={dataEmbarazo.birthmom} changeUserInfo={changeEmbarazo} id="birthmom" icon="icon-[clarity--date-solid]" placeholder="" />
 
-                        <Input name="Fecha estimada del parto" userInfo={dataEmbarazo.birthdate} changeUserInfo={changeEmbarazo} id="birthdate" icon="icon-[clarity--date-solid]" placeholder=""/>
+                        <Input name="Fecha estimada del parto" userInfo={dataEmbarazo.birthdate} changeUserInfo={changeEmbarazo} id="birthdate" icon="icon-[clarity--date-solid]" placeholder="" />
 
-                        <Input name="Semanas de embarazo" userInfo={dataEmbarazo.weeks} changeUserInfo={changeEmbarazo} id="weeks" icon="icon-[clarity--date-solid]" placeholder=""/>
+                        <Input name="Semanas de embarazo" userInfo={dataEmbarazo.weeks} changeUserInfo={changeEmbarazo} id="weeks" icon="icon-[clarity--date-solid]" placeholder="" />
 
                         <Input name="Tipo de embarazo" userInfo={dataEmbarazo.birthtype} changeUserInfo={changeEmbarazo} id="birthtype" icon="icon-[healthicons--pregnant]" placeholder="(simple / múltiple)" />
 
-                        <Input name="He estado embarazada" userInfo={dataEmbarazo.pregnantbefore} changeUserInfo={changeEmbarazo} id="pregnantbefore" icon="icon-[healthicons--pregnant]" placeholder="sí / no"/>
+                        <Input name="He estado embarazada" userInfo={dataEmbarazo.pregnantbefore} changeUserInfo={changeEmbarazo} id="pregnantbefore" icon="icon-[healthicons--pregnant]" placeholder="sí / no" />
                     </>
                 }
                 {tipo === "bebe" &&
                     <>
                         <Input name="Fecha de nacimiento (bebé)" userInfo={dataBebe.birthbaby} changeUserInfo={changeBebe} id="birthbaby" icon="icon-[clarity--date-solid]" placeholder="" />
 
-                        <Input name="Estatura del bebé" userInfo={dataBebe.babyheight} changeUserInfo={changeBebe} id="babyheight" icon="icon-[mdi--human-male-height]" placeholder="Centímetros (opcional)"/>
+                        <Input name="Estatura del bebé" userInfo={dataBebe.babyheight} changeUserInfo={changeBebe} id="babyheight" icon="icon-[mdi--human-male-height]" placeholder="Centímetros (opcional)" />
 
                         <Input name="Peso del bebé" userInfo={dataBebe.babyweight} changeUserInfo={changeBebe} id="babyweight" icon="icon-[material-symbols--weight]" placeholder="Kilogramos (opcional)" />
                     </>
@@ -109,7 +110,7 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
 
                         <Input name="Tipo de parto" userInfo={dataPostparto.birthtype} changeUserInfo={changePostparto} id="birthtype" icon="icon-[healthicons--pregnant]" />
 
-                        <Input name="He estado embarazada" userInfo={dataPostparto.pregnantbefore} changeUserInfo={changePostparto} id="pregnantbefore" icon="icon-[healthicons--pregnant]" placeholder="sí / no"/>
+                        <Input name="He estado embarazada" userInfo={dataPostparto.pregnantbefore} changeUserInfo={changePostparto} id="pregnantbefore" icon="icon-[healthicons--pregnant]" placeholder="sí / no" />
                     </>
                 }
                 {question &&
@@ -144,14 +145,9 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
 
                     <b className="text-red-600">{messageError}</b>
 
-                    <button className="btnn bg-pink-500 hover:bg-pink-600 w-10/12 md:w-1/3  border-none rounded text-white px-4 py-2" onClick={
-                        () => {
-                            //boton transbank
-                        }
-                    }><p>Pagar con <b>Transbank</b></p></button>
-
+                    <Transbank precio={precio} />
                     <Checkout tipo={tipo} setMessageError={setMessageError} precio={verificado ? 0 : precio} title={title} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
-                    
+
                     <div className="codigo__container">
                         <h5 className="text-md title">Código de invitación</h5>
                         <input
@@ -168,9 +164,12 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                     <button className="btnn bg-pink-500 hover:bg-pink-600 w-10/12 md:w-1/3
                 border-none rounded text-white px-4 py-2" onClick={
                             () => {
+                                //fetch, si se verifica el código enviado (cuppon), verificado será true ahora
+
+
                                 if (verificado) {
                                     precio = 0;
-                                    //mandar los correos altiro y mandar el cuppón, la variable se llama cuppon
+                                    //mandar los correos, no se paga
                                     
                                 } else {
                                     setMessageError("No has ingresado un código válido.");
@@ -178,7 +177,7 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                             }
                         }><p>Pagar con el <b>código</b></p> </button>
 
-                    
+
                 </div>
             </div>
         </form>
