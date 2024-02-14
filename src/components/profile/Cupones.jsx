@@ -88,7 +88,7 @@ const Cupones = ({changeState}) => {
                         codigos.map(codigo =>(
                             <div className='text-gray-900 px-2 py-1 flex justify-between items-center w-full'>
                                 <p>{codigo.code}</p>
-                                {codigo.status ? (<p className='text-blue-500'>Disponible</p>) : (<p className='text-red-500'>Usado</p>)}
+                                {codigo.status ? (<p className='text-blue-500'>Usado</p>) : (<p className='text-red-500'>Disponible</p>)}
                             </div>
                         ))
                     }
