@@ -138,7 +138,7 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
             <div className="2xl:w-1/4 mt-6 2xl:mt-0 pagar__buton-container flex flex-col justify-center items-center w-full gap-4 text-gray-700">
                 <h3 className="formulario__de__pago-h3 font-bold text-3xl text-start">Pago</h3>
 
-                <div className="flex mt-4 flex-col gap-1 w-full items-center justify-center ">
+                <div className="flex mt-4 flex-col gap-1 w-full lg:w-1/4 2xl:w-full items-center justify-center ">
                     <p>Vas a pagar un total de <b>${verificado ? 0 : precio}</b></p>
                     <p className="underline text-md">Elige tu método de pago: </p>
 
