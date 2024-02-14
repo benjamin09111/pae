@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react'
 const Editar = () => {
   const [userInfo, setUserInfo] = useState({
     name: localStorage.getItem('name'),
-    lastname: "",
-    age: "",
+    lastname: localStorage.getItem('lastname'),
+    age: localStorage.getItem('age'),
     email: localStorage.getItem('email'),
+    country: localStorage.getItem('country')
   });
 
   return (
@@ -27,6 +28,10 @@ const Editar = () => {
       </div>
       <div className='flex w-full justify-between text-md xl:text-lg bg-gray-100 rounded p-2'>
         <p><b>Edad</b>: </p>
+        <span className="icon-[uil--edit] text-gray-500 hover:text-gray-600 cursor-pointer"></span>
+      </div>
+      <div className='flex w-full justify-between text-md xl:text-lg bg-gray-100 rounded p-2'>
+        <p><b>País</b>: </p>
         <span className="icon-[uil--edit] text-gray-500 hover:text-gray-600 cursor-pointer"></span>
       </div>
 

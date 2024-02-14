@@ -35,21 +35,15 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
                     setMessage("Error de credenciales.");
                 } else if (response.token != "") {
                     const token = response.token
-
-                    //habra que cambiar esto, ahora llegará diferente la data, usuario.algo
                     const usuario = response.user
 
-                    //DATA ANTIGUA!
                     localStorage.setItem('miToken', token)
                     localStorage.setItem('user', usuario)
                     localStorage.setItem('email', usuario.user_email)
-                    localStorage.setItem('name', usuario.user_login)
-                    /*
-                    localStorage.setItem('name', usuario.wp_usermeta[0].meta_value)
-                    localStorage.setItem('lastname', usuario.wp_usermeta[1].meta_value)
-                    */
-                    //FALTA EDAD
-                    //localStorage.setItem('age',usuario.user_email)
+                    localStorage.setItem('name', usuario.user_name)
+                    localStorage.setItem('lastname', usuario.user_lastname)
+                    localStorage.setItem('age',usuario.user_age)
+                    localStorage.setItem('country',usuario.user_country)
 
                     changeState();
                     setInvitado(false);

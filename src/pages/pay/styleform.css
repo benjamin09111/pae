@@ -14,7 +14,6 @@
     display: flex;
     width: 100%;
     align-items: center;
-    color: white;
 }
 
 .input-container  {
@@ -30,9 +29,12 @@
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     padding-left: 1rem;
-    color: rgb(236, 236, 236);
     height: 3rem;
 }
+
+.input__container input::placeholder {
+    color: rgba(233, 233, 233, 0.582);
+  }
 
 .input__container input:focus {
     outline: none;

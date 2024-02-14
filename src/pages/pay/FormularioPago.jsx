@@ -43,47 +43,41 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
 
         if (token) {
             setName(localStorage.getItem('name'));
-            //agregar Info automática al usuario: email, name, lastname, age
+            //agregar Info automática al usuario: email, name, lastname, age, country
             agregarAutomaticaUsuario("email", localStorage.getItem('email'));
             agregarAutomaticaUsuario("name", localStorage.getItem('name'));
             agregarAutomaticaUsuario("lastname", localStorage.getItem('lastname'));
             agregarAutomaticaUsuario("age", localStorage.getItem('age'));
+            agregarAutomaticaUsuario("country", localStorage.getItem('country'));
         }
     }, [login])
 
     return (
         <form className="formulario__de__pago flex 2xl:flex-row flex-col justify-evenly items-start pt-8 relative w-full">
 
-            <div className="2xl:w-1/3  flex flex-col gap-12">
+            <div className="2xl:w-1/3 justify-center items-center flex flex-col gap-12">
                 <h3 className="2xl:text-start formulario__de__pago-h3 text-3xl text-center font-semibold">Ficha médica - {tipo === "bebe" ? "Bebé" : tipo === "embarazo" ? "Embarazo" : tipo === "postparto" ? "Postparto" : ""}</h3>
                 <b className="top-1 right-1 absolute text-2xl cursor-pointer" onClick={() => {
                     changeState();
                     setLogin(false);
                 }}>&times;</b>
-                <img className="w-full" src={
+                <img className="w-1/2 2xl:w-full" src={
                     tipo === "bebe" ? bebe :
                         tipo === "embarazo" ? embarazo :
                             tipo === "postparto" ? postparto : ""
                 } alt="imagen" />
             </div>
 
-            <div className="flex mt-6 w-full 2xl:mt-0 justify-center items-center flex-col gap-3 2xl:w-1/3">
+            <div className="flex mt-6 2xl:px-0 px-36 w-full 2xl:mt-0 justify-center items-center flex-col gap-3 2xl:w-1/3">
                 <h3 className="font-bold text-center mb-6 text-3xl 2xl:text-start formulario__de__pago-h3">{question ? `Información para tu pregunta` : "Información para la teleconsulta"}</h3>
                 {
                     name === "" && (
                         <>
                             <Input name="Nombre madre" userInfo={userInfo.name} changeUserInfo={changeUserInfo} id="name" icon="" />
-
                             <Input name="Apellido madre" userInfo={userInfo.lastname} changeUserInfo={changeUserInfo} id="lastname" icon="" />
-
                             <Input name="Edad madre" userInfo={userInfo.age} changeUserInfo={changeUserInfo} id="age" icon="icon-[clarity--email-solid]" />
                             <Input name="Correo madre" userInfo={userInfo.email} changeUserInfo={changeUserInfo} id="email" icon="" />
-
-                            {
-                                /*
-                                    <Input name="País" userInfo={userInfo.country} changeUserInfo={changeUserInfo} id="country" icon="icon-[mdi--location]" />
-                                */
-                            }
+                            <Input name="País" userInfo={userInfo.country} changeUserInfo={changeUserInfo} id="country" icon="icon-[mdi--location]" />
                         </>
                     )
                 }
@@ -154,7 +148,7 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                         () => {
                             //boton transbank
                         }
-                    }><p>Pagar con <b>Transbank</b></p> </button>
+                    }><p>Pagar con <b>Transbank</b></p></button>
 
                     <Checkout tipo={tipo} setMessageError={setMessageError} precio={verificado ? 0 : precio} title={title} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
                     

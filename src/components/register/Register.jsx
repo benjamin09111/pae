@@ -7,6 +7,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
     const [name, setName] = useState("");
     const [lastname, setLastName] = useState("");
     const [age, setAge] = useState("");
+    const [country, setCountry] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
     const handleTogglePasswordVisibility = () => {
@@ -25,6 +26,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
             name: name,
             lastname: lastname,
             age: age,
+            country: country,
             email: email,
             password: password,
         };
@@ -99,6 +101,16 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                         name="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <p>País</p>
+                    <input
+                        type="text"
+                        id="country"
+                        name="country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
                     />
                 </div>
                 <div>

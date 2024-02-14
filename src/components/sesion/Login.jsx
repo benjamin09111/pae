@@ -41,21 +41,16 @@ const Login = ({setState, style}) => {
                     const token = response.token
                     const usuario = response.user
 
-                    //DATA ANTIGUA!
                     localStorage.setItem('miToken', token)
                     localStorage.setItem('user', usuario)
                     localStorage.setItem('email', usuario.user_email)
-                    localStorage.setItem('name', usuario.user_login)
-                    /*
-                    localStorage.setItem('name', usuario.wp_usermeta[0].meta_value)
-                    localStorage.setItem('lastname', usuario.wp_usermeta[1].meta_value)
-                    */
-                    //FALTA EDAD
-                    //localStorage.setItem('age',usuario.user_email)
+                    localStorage.setItem('name', usuario.user_name)
+                    localStorage.setItem('lastname', usuario.user_lastname)
+                    localStorage.setItem('age',usuario.user_age)
+                    localStorage.setItem('country',usuario.user_country)
 
                     setState("");
                     window.location.reload();
-                    //return;
                 }
                 else {
                     setEstiloText({ color: "red" });

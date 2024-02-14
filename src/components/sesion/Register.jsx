@@ -8,6 +8,7 @@ const Register = ({ setState, style }) => {
         lastname: "",
         age: "",
         email: "",
+        country: "",
         password: "",
     });
 
@@ -70,7 +71,7 @@ const Register = ({ setState, style }) => {
                     id="lastname"
                     name="lastname"
                     value={dataSend.lastname}
-                    onChange={(e) => setDataSend({...dataSend, lastname: e.target.value})}
+                    onChange={(e) => setDataSend({ ...dataSend, lastname: e.target.value })}
                 />
             </div>
             <div>
@@ -80,7 +81,7 @@ const Register = ({ setState, style }) => {
                     id="age"
                     name="age"
                     value={dataSend.age}
-                    onChange={(e) => setDataSend({...dataSend, age: e.target.value})}
+                    onChange={(e) => setDataSend({ ...dataSend, age: e.target.value })}
                 />
             </div>
             <div>
@@ -90,7 +91,17 @@ const Register = ({ setState, style }) => {
                     id="email"
                     name="email"
                     value={dataSend.email}
-                    onChange={(e) => setDataSend({...dataSend, email: e.target.value})}
+                    onChange={(e) => setDataSend({ ...dataSend, email: e.target.value })}
+                />
+            </div>
+            <div>
+                <p>País</p>
+                <input
+                    type="text"
+                    id="country"
+                    name="country"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
                 />
             </div>
             <div>
@@ -101,7 +112,7 @@ const Register = ({ setState, style }) => {
                         id="password"
                         name="password"
                         value={dataSend.password}
-                        onChange={(e) => setDataSend({...dataSend, password: e.target.value})}
+                        onChange={(e) => setDataSend({ ...dataSend, password: e.target.value })}
                     />
                     <button className="relative" onClick={handleTogglePasswordVisibility}>
                         {showPassword ? <span className="absolute left-1 top-0 icon-[mdi--hide-outline]"></span> : <span className="absolute left-1 top-0 icon-[mdi--show-outline]"></span>}
@@ -114,7 +125,7 @@ const Register = ({ setState, style }) => {
 
             <p style={estiloText}>{message}</p>
 
-            <p className="underline text-xl" onClick={()=>setState("login")}>Iniciar sesión</p>
+            <p className="underline text-xl" onClick={() => setState("login")}>Iniciar sesión</p>
         </div>
     )
 }
