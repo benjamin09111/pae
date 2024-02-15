@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Captcha from "../Captcha";
+import React, { useState } from "react";
+import ReCaptcha from "../Captcha";
 import "../login/login.css";
 
 const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
-    const [captchaOK, setCaptchaOK] = useState(false);
+    const myCaptchaRef = React.createRef();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -42,36 +42,35 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
             body: JSON.stringify(data)
         };
 
-        if (captchaOK) {
+        if (!Object.values(data).some(value => value === "") && myCaptchaRef != null && myCaptchaRef.current.getValue()) {
             await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
                 .then(response => response.json())
                 .then(response => {
-                    if(name !== "" && lastname!== "" && age!== "" && country!== "" && email!== "" && password!== ""){
-                        if (response.id) {
-                            setEstiloText({ color: "blue" });
-                            setMessage("Cuenta creada. Inicie sesión.");
-                        } else {
-                            setEstiloText({ color: "red" });
-                            setMessage("No se ha podido crear la cuenta.");
-                        }
-                    }else{
+                    if (response.id) {
+                        setEstiloText({ color: "blue" });
+                        setMessage("Cuenta creada. Inicie sesión.");
+                    } else {
+                        if (myCaptchaRef.current.getValue())
+                            myCaptchaRef.current.reset();
                         setEstiloText({ color: "red" });
-                        setMessage("Rellene los campos.");
+                        setMessage("No se ha podido crear la cuenta.");
                     }
                 })
                 .catch(err => {
+                    myCaptchaRef.current.reset();
                     setEstiloText({ color: "red" });
-                    setMessage("No se ha podido crear la cuenta (servidor).");
+                    setMessage("No se ha podido crear la cuenta.");
                 });
         } else {
+            myCaptchaRef.current.reset();
             setEstiloText({ color: "red" });
-            setMessage("Complete el Captcha.");
+            setMessage("Complete todos los campos.");
         }
     };
 
     return (
         <>
-            <div className="login__container flex flex-col items-center justify-center bg-white text-gray-700">
+            <div className="login__container rounded flex flex-col items-center justify-center bg-white text-gray-700">
                 <h4 className="title text-4xl mb-2 mt-2">Registro</h4>
 
                 <div>
@@ -92,6 +91,16 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                         name="lastname"
                         value={lastname}
                         onChange={(e) => setLastName(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <p>Edad</p>
+                    <input
+                        type="text"
+                        id="age"
+                        name="age"
+                        value={age}
+                        onChange={(e) => setAge(e.target.value)}
                     />
                 </div>
                 <div>
@@ -125,12 +134,12 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <button className="relative" onClick={handleTogglePasswordVisibility}>
-                            {showPassword ? <span className="absolute left-1 top-0 icon-[mdi--hide-outline]"></span> : <span className="absolute left-1 top-0 icon-[mdi--show-outline]"></span>}
+                            {showPassword ? <span className="absolute left-1 top-1/4 icon-[mdi--hide-outline]"></span> : <span className="absolute left-1 top-1/4 icon-[mdi--show-outline]"></span>}
                         </button>
                     </div>
                 </div>
                 <div className="mt-4">
-                    <Captcha setCaptchaOK={setCaptchaOK}  />
+                    <ReCaptcha CaptchaRef={myCaptchaRef} required />
                 </div>
                 <button className="button-form my-4" onClick={registrarse}>
                     Registrar cuenta

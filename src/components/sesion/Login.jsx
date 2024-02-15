@@ -45,7 +45,9 @@ const Login = ({ setState, style }) => {
                         //guardamos en el local directo
                         localStorage.setItem('name', response.user.wp_usermeta["wpcf_f_name"]);
                         localStorage.setItem('lastname', response.user.wp_usermeta["wpcf_l_name"]);
-                        localStorage.setItem('age', response.user.wp_usermeta["wpcf_age"]);
+                        if(response.user.wp_usermeta["age"]){
+                            localStorage.setItem('age', response.user.wp_usermeta["wpcf_age"]);
+                        }
                         localStorage.setItem('country', response.user.wp_usermeta["wpcf_country"]);
 
                         setState("");
