@@ -2,7 +2,6 @@ import { useState } from "react";
 import React from "react";
 import ReCaptcha from "../Captcha";
 import "../login/login.css";
-import Captcha from "../ReCaptcha";
 
 const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
     const [email, setEmail] = useState("");
