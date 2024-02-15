@@ -1,13 +1,14 @@
 import { useState } from "react";
+import React from "react";
+import ReCaptcha from "../Captcha";
 import "./login.css";
 
 const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
-
     const [message, setMessage] = useState("");
     const [estiloText, setEstiloText] = useState({ color: "black" });
-
+    const myCaptchaRef = React.createRef();
     const logearse = async () => {
 
         setEstiloText({ color: "black" });
@@ -17,7 +18,6 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
             email: user,
             password: password
         };
-
         const options = {
             method: 'POST',
             headers: {
@@ -25,7 +25,7 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
             },
             body: JSON.stringify(data)
         };
-
+        if(!Object.values(data).some(value => value === ""))
         await fetch('https://api-dev.mimanualdelbebe.com/api/user/login', options)
             .then(response => response.json())
             .then(response => {
@@ -49,21 +49,24 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
                     changeState();
                     setInvitado(false);
                     setLogeado(true);
-                } else if (user == "" || password == "") {
+                } else {
+                    myCaptchaRef.current.reset();
                     setEstiloText({ color: "red" });
-                    setMessage("Rellene los campos.");
-                }
-                else {
-                    setEstiloText({ color: "red" });
-
                     setMessage("No se ha podido establecer sesión.");
                     console.log(response)
                 }
             })
             .catch(err => {
+                myCaptchaRef.current.reset();
                 setEstiloText({ color: "red" });
                 setMessage("No se ha podido establecer sesión (servidor).");
+                console.log(err);
             });
+        else{
+            myCaptchaRef.current.reset();
+            setEstiloText({ color: "red" });
+            setMessage("Rellena todos los campos.");
+        }
     };
 
     return (
@@ -73,6 +76,7 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
                 <div>
                     <p>Email</p>
                     <input
+                        required
                         type="text"
                         id="user"
                         name="user"
@@ -83,12 +87,16 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
                 <div>
                     <p>Contraseña</p>
                     <input
+                        required
                         type="password"
                         id="password"
                         name="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                </div>
+                <div className="mt-4">
+                    <ReCaptcha CaptchaRef={myCaptchaRef} required/>
                 </div>
                 <button className="button-form" onClick={logearse}>
                     Inicia sesión
