@@ -13,16 +13,13 @@ import { Link } from "react-router-dom"
 const Profile = () => {
     const [state, setState] = useState("");
     const [admin, setAdmin] = useState(true);
-
-    const [dataUser, setDataUser] = useState({
-        nombre: "",
-        apellido: "",
-        age: "Desconocido",
-        email: "",
-        country: ""
-    });
-
     const [user_id, setUserId] = useState("");
+
+    const [nombre, setName] = useState("");
+    const [apellido, setApellido] = useState("");
+    const [age, setAge] = useState("");
+    const [email, setEmail] = useState("");
+    const [country, setCountry] = useState("");
 
     const closeSesion = () => {
         localStorage.removeItem('miToken');
@@ -38,77 +35,35 @@ const Profile = () => {
     useEffect(() => {
         const token = localStorage.getItem('miToken');
         if (token) {
-            setUserId(localStorage.getItem('user_id'));
+            setUserId(localStorage.getItem("user_id"));
+            setName(localStorage.getItem('name'));
+            setApellido(localStorage.getItem('lastname'));
+            setEmail(localStorage.getItem('email'));
+            setCountry(localStorage.getItem('country'));
+
+            if(localStorage.getItem('age')){
+                setAge(localStorage.getItem('age'));
+            }else{
+                setAge("Desconocido");
+            }
+
         }
-    }, [])
+    }, []);
 
     return (
         <div className="flex flex-col">
             <div className="hidden lg:flex">
                 <Navbar />
             </div>
-            <main className="flex lg:py-0 py-6 flex-col lg:flex-row">
-                <div className="lg:border-r-1 h-128 mt-16 lg:border-custom lg:w-1/5 flex  flex-col justify-center items-center w-full">
-                    <ProfileFoto imagen="" name={dataUser["nombre"] !== "" ? dataUser["nombre"] : "Sin perfil"} />
-                    <button onClick={
-                        async()=> {
-                            const token = localStorage.getItem("miToken").slice(1, localStorage.getItem("miToken").length-1);
-
-                            const options = {
-                                    method: 'GET',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        "Authorization": token
-                                    }
-                            };
-                        
-                                await fetch('https://api-dev.mimanualdelbebe.com/api/user/me', options)
-                                    .then(response => response.json())
-                                    .then(response => {
-                                        if(response.msg == "token no es válido"){
-                                            setState("vuelva");
-                                        }else{
-                                            setDataUser(prevState => ({
-                                                ...prevState,
-                                                nombre: response.wp_usermeta["wpcf_f_name"]
-                                            }));
-
-                                            setDataUser(prevState => ({
-                                                ...prevState,
-                                                nombre: response.wp_usermeta["wpcf_f_name"]
-                                            }));
-
-                                            setDataUser(prevState => ({
-                                                ...prevState,
-                                                email: response.user_email
-                                            }));
-
-                                            setDataUser(prevState => ({
-                                                ...prevState,
-                                                country: response.wp_usermeta["wpcf_country"]
-                                            }));
-
-                                            setDataUser(prevState => ({
-                                                ...prevState,
-                                                age: response.wp_usermeta["wpcf_age"]
-                                            }));
-
-                                            setDataUser(prevState => ({
-                                                ...prevState,
-                                                apellido: response.wp_usermeta["wpcf_l_name"]
-                                            }));
-                                        }
-                                    }).catch(err => {
-                                        console.log(err);
-                                    });
-                            
-                        }
-                    }>Traer Data</button>
+            <main className="flex lg:py-0 pb-6 flex-col lg:flex-row">
+                <div className="lg:border-r-1 pt-16 xl:h-screen lg:py-12 lg:border-custom lg:w-1/5 flex  flex-col justify-center items-center w-full">
+                    <ProfileFoto imagen="" name={nombre !== "" ? nombre : "Sin perfil"} />
                     {
-                        user_id !== "" ? (
+                        nombre !== "" ? (
                             <div className="w-full pt-6 lg:pt-0 flex flex-col justify-center items-center gap-2 lg:border-none border-b-1 border-custom pb-6 lg:pb-0">
                                 {
-                                    admin && (
+                                    //solamente la cuenta ADMIN en el trello
+                                    user_id === "1156878" && (
                                         <p onClick={() => setState("crear_cupones")} className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline ${state == "crear_cupones" && "text-pink-500"}`}>Crear cupones</p>
                                     )
                                 }
@@ -116,7 +71,7 @@ const Profile = () => {
                                 <Link to="/begin" className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline`}>Realizar consulta</Link>
 
                                 {
-                                    user_id !== "" && (<p onClick={closeSesion()} className="text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline">
+                                    nombre !== "" && (<p onClick={closeSesion} className="text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline">
                                         Cerrar sesión
                                     </p>)
                                 }
@@ -135,11 +90,11 @@ const Profile = () => {
                                 </p>
 
                                 {
-                                /*
-                                    <p onClick={() => setState("preguntas")} className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline ${state == "preguntas" && "text-pink-500"}`}>
-                                    Preguntas frecuentes
-                                    </p>
-                                */
+                                    /*
+                                        <p onClick={() => setState("preguntas")} className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline ${state == "preguntas" && "text-pink-500"}`}>
+                                        Preguntas frecuentes
+                                        </p>
+                                    */
                                 }
                                 <p className="text-gray-400 flex gap-2 items-center w-2/3 justify-between">
                                     Preguntas frecuentes
@@ -147,11 +102,17 @@ const Profile = () => {
                                 </p>
                             </div>
                         ) : (
-                            <p className="text-pink-500 cursor-pointer font-semibold hover:underline" onClick={() => setState("login")}>Iniciar sesión</p>
+                            <p className="bg-pink-500 text-white p-2 hover:bg-pink-600 rounded cursor-pointer font-semibold" onClick={() => setState("login")}>Iniciar sesión</p>
                         )
                     }
                 </div>
+
                 <div className="flex justify-center items-center w-full  overflow-auto mt-8 lg:mt-0">
+                    {
+                        state == "" && (
+                            <div className="title text-xl">Seleccione alguna opción</div>
+                        )
+                    }
                     {
                         state == "login" && (
                             <Login setState={setState} style="sesion__profile" />
@@ -166,7 +127,7 @@ const Profile = () => {
                     }
                     {
                         state == "crear_cupones" && (
-                            <Cuppon changeState={setState}/>
+                            <Cuppon changeState={setState} />
                         )
                     }
                     {
@@ -180,8 +141,15 @@ const Profile = () => {
                         )
                     }
                     {
+                        
                         state == "informacion" && (
-                            <Informacion dataUser={dataUser} />
+                            <Informacion dataUser={{
+                                nombre: nombre,
+                                apellido: apellido,
+                                age: age,
+                                email: email,
+                                country: country
+                            }} />
                         )
                     }
                 </div>

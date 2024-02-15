@@ -38,8 +38,8 @@ const Login = ({ setState, style }) => {
                         const user_id = response.user.id
                         const user_email = response.user.user_email
 
-                        localStorage.setItem('miToken', JSON.stringify(token));
-                        localStorage.setItem('user_id', JSON.stringify(user_id));
+                        localStorage.setItem('miToken', token);
+                        localStorage.setItem('user_id', user_id);
                         localStorage.setItem('email', user_email);
 
                         //guardamos en el local directo
@@ -48,9 +48,8 @@ const Login = ({ setState, style }) => {
                         localStorage.setItem('age', response.user.wp_usermeta["wpcf_age"]);
                         localStorage.setItem('country', response.user.wp_usermeta["wpcf_country"]);
 
-                        //cerrar login y ponerle logeado
-                        changeState();
-                        setLogeado(true);
+                        setState("");
+                        window.location.reload();
                     } else {
                         setEstiloText({ color: "red" });
                         setMessage("Error desconocido.");
