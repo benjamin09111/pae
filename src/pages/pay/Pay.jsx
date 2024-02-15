@@ -9,14 +9,6 @@ import { SintomasMadre, SintomasBebe, SintomasPostparto } from './Sintomas'
 import "./pay.css"
 import "./paystyles.css"
 
-const Aviso = ({ texto }) => {
-  return (
-    <div className="aviso__texto">
-      <p style={{ textAlign: "center" }}>{texto}</p>
-    </div>
-  )
-}
-
 const Pay = () => {
   //info del usuario que se repite en todas las consultas
   const [userInfo, setUserInfo] = useState({
@@ -25,9 +17,10 @@ const Pay = () => {
     age: "",
     email: "",
     type: "",
+    country: "",
     sintoms: []
   })
-
+  //funcion que agrega/actualiza al userInfo
   const agregarAutomaticaUsuario = (name, value) => {
     setUserInfo((prevData) => {
       const newData = { ...prevData };
@@ -36,8 +29,7 @@ const Pay = () => {
       return newData;
     })
   }
-
-  //actualiza la informacion de usuario dependiendo
+  //actualiza la data según el tipo
   const handleChangeUser = (e) => {
     const { name, value, checked, type } = e.target;
 
@@ -71,7 +63,6 @@ const Pay = () => {
   });
   const handleChangeEmbarazo = (e) => {
     const { name, value } = e.target;
-
     setDataEmbarazo((prevData) => ({
       ...prevData,
       [name]: value,
@@ -91,8 +82,6 @@ const Pay = () => {
       ...prevData,
       [name]: value,
     }));
-
-    console.log(dataBebe)
   };
   //info extra de tipo postparto
   const [dataPostparto, setDatapostparto] = useState({
@@ -102,41 +91,17 @@ const Pay = () => {
     question: ""
   });
   const handleChangePostparto = (e) => {
-
     const { name, value } = e.target;
-
     setDatapostparto((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-
+  //formularios que se mostrarán según la etapa
   const [form1, setForm1] = useState(true);
   const [form2, setForm2] = useState(false);
   const [form3, setForm3] = useState(false);
-
-  //debe cambiarse, si ya está logeado y tiene token, poner true.
-  const [logeado, setLogeado] = useState(false);
-  //la variable logeado debe depender del token
-  useEffect(() => {
-    // Al cargar la página, verifica si hay un token en el localStorage
-    const token = localStorage.getItem('miToken');
-
-    console.log('Token en localStorage:', token);
-
-    if (token) {
-      // Aquí puedes realizar una llamada al servidor para validar el token si es necesario
-      // Si el token es válido, establece logeado en true, de lo contrario, en false
-      // En este ejemplo, simplemente establecemos logeado en true si hay un token
-      setLogeado(true);
-      console.log("Se ha modificado el logeado, tiene un token")
-    }
-  }, []); // El array vacío asegura que useEffect solo se ejecute una vez al cargar la página
-
-
-  //mostrar o no contenedor de login
-  const [login, setLogin] = useState(true);
-
+  //correccion de errores en los forms
   const handleSubmit = (e) => {
     e.preventDefault();
     if (form1) {
@@ -145,10 +110,36 @@ const Pay = () => {
       etapa2();
     }
   };
+  //mostrar o no contenedor de login
+  const [login, setLogin] = useState(true);
+  //abrir login
+  const openLogin = () => {
+    setLogin(true);
+    setRegistrarse(false);
+  }
+  //cerrar login
   const closeLogin = () => {
     setLogin(false);
   }
-  const etapa1 = (e) => {
+  //cerrar sesión
+  const closeSesion = () => {
+    localStorage.removeItem('miToken');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('email');
+    localStorage.removeItem('name');
+    localStorage.removeItem('lastname');
+    localStorage.removeItem('age');
+    localStorage.removeItem('country');
+    window.location.reload();
+  }
+  //mostrar o no contenedor de registro
+  const [registrarse, setRegistrarse] = useState(false);
+  const openRegister = () => {
+    setLogin(false);
+    setRegistrarse(true);
+  }
+  //darle clic al siguiente (etapa 1)
+  const etapa1 = () => {
     if (userInfo["type"] !== "") {
       setForm1(false);
       setForm2(true);
@@ -160,15 +151,14 @@ const Pay = () => {
     setForm1(true);
     setForm2(false);
   }
-
+  //darle clic al siguiente (etapa 2)
   const etapa2 = () => {
-    console.log(userInfo);
-      if(userInfo.sintoms.length > 0){
-        setForm2(false);
-        setForm3(true);
-      }else{
-        setMessage("Debe seleccionar al menos un síntoma.");
-      }
+    if (userInfo.sintoms.length > 0) {
+      setForm2(false);
+      setForm3(true);
+    } else {
+      setMessage("Debe seleccionar al menos un síntoma.");
+    }
   }
   const volveretapa2 = () => {
     setForm2(true);
@@ -176,16 +166,15 @@ const Pay = () => {
   }
 
   const [temaConsulta, setTemaConsulta] = useState("");
+  //mostrar mensaje por pantalla
   const [message, setMessage] = useState("");
+  //qué formulario se abrirá, el de pregunta (1) o teleconsulta (2)
   const [state1, setState1] = useState(false);
   const [state2, setState2] = useState(false);
-  //abrir formulario, es necesario revisar el login antes
+  //abrir formulario 1 o 2, es necesario revisar el login antes
   const changeState1 = () => {
     setState1(!state1)
-
-    if (logeado) {
-      setState1(!state1)
-    } else {
+    if (!logeado) {
       setLogin(true)
     }
   };
@@ -198,39 +187,71 @@ const Pay = () => {
     }
   };
 
-  const [invitado, setInvitado] = useState(false);
-
-  const [registrarse, setRegistrarse] = useState(false);
-
-  const openLogin = () => {
-    setLogin(true);
-    setRegistrarse(false);
-  }
-
-  const openRegister = () => {
-    setLogin(false);
-    setRegistrarse(true);
-  }
-
-  const [nickname, setNickName] = useState("");
+  //informacion de logeado
+  const [user_id, setUserId] = useState("");
   const [email, setEmail] = useState("");
-  const [lastname, setLastname] = useState("");
-
+  const [logeado, setLogeado] = useState(false);
+  //actualizar la informacion
   useEffect(() => {
     const token = localStorage.getItem('miToken');
     if (token) {
-      setNickName(localStorage.getItem('username'));
-      setLastname(localStorage.getItem('lastname'));
-      setEmail(localStorage.getItem('email'));
+      setUserId(localStorage.getItem('user_id'))
+      setEmail(localStorage.getItem('email'))
+      setLogeado(true);
+      //agregar informacion del logeado de manera automatica en setUserInfo
     }
-  }, [form1, form2, form3, login])
+  }, [login])
 
   return (
     <>
       <main className="px-12 pb-6">
-        {(state1) && <FormularioPago login={login} registrarse={registrarse} agregarAutomaticaUsuario={agregarAutomaticaUsuario} userInfo={userInfo} changeUserInfo={handleChangeUser} precio="3" title="Pregunta para la consulta" question={true} state={state1} changeState={changeState1} logeado={logeado} tipo={temaConsulta} dataEmbarazo={dataEmbarazo} dataBebe={dataBebe} dataPostparto={dataPostparto} changeEmbarazo={handleChangeEmbarazo} changeBebe={handleChangeBebe} changePostparto={handleChangePostparto} setLogin={setLogin} estaLogeado={logeado} />}
 
-        {(state2) && <FormularioPago agregarAutomaticaUsuario={agregarAutomaticaUsuario} userInfo={userInfo} changeUserInfo={handleChangeUser} precio="20" title="Teleconsulta" question={false} state={state2} changeState={changeState2} logeado={logeado} tipo={temaConsulta} dataEmbarazo={dataEmbarazo} dataBebe={dataBebe} dataPostparto={dataPostparto} changeEmbarazo={handleChangeEmbarazo} changeBebe={handleChangeBebe} changePostparto={handleChangePostparto} setLogin={setLogin} estaLogeado={logeado} />}
+        {(state1) && //formularios a la hora de realizar el pedido
+          <FormularioPago
+            title="Pregunta para la consulta"
+            question={true} state={state1}
+            precio="3"
+            tipo={temaConsulta}
+            userInfo={userInfo}
+            changeUserInfo={handleChangeUser}
+            dataEmbarazo={dataEmbarazo}
+            dataBebe={dataBebe}
+            dataPostparto={dataPostparto}
+            changeEmbarazo={handleChangeEmbarazo}
+            changeBebe={handleChangeBebe}
+            changePostparto={handleChangePostparto}
+            logeado={logeado}
+            agregarAutomaticaUsuario={agregarAutomaticaUsuario}
+
+            login={login}
+            registrarse={registrarse}
+            changeState={changeState1}
+            setLogin={setLogin}
+            estaLogeado={logeado}
+          />}
+
+        {(state2) &&
+          <FormularioPago
+            title="Teleconsulta"
+            question={false}
+            precio="20"
+            tipo={temaConsulta}
+            userInfo={userInfo}
+            changeUserInfo={handleChangeUser}
+            dataEmbarazo={dataEmbarazo}
+            dataBebe={dataBebe}
+            dataPostparto={dataPostparto}
+            changeEmbarazo={handleChangeEmbarazo}
+            changeBebe={handleChangeBebe}
+            changePostparto={handleChangePostparto}
+            logeado={logeado}
+            agregarAutomaticaUsuario={agregarAutomaticaUsuario}
+
+            state={state2}
+            changeState={changeState2}
+            setLogin={setLogin}
+            estaLogeado={logeado}
+          />}
 
         {
           ((!state1 && !state2) && <form className="pt-12" onSubmit={handleSubmit}>
@@ -293,7 +314,13 @@ const Pay = () => {
                 </div>
                 <p className="text-red-500 text-center">{message}</p>
                 <div className="w-full flex justify-center">
-                  <button className="button-form" onClick={etapa1}>Siguiente</button>
+                  <button className="button-form" onClick={()=>{
+                    etapa1();
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth' // Esto hará que el scroll sea suave
+                    });
+                  }}>Siguiente</button>
                 </div>
               </div>)
             }
@@ -308,8 +335,20 @@ const Pay = () => {
 
                   <p className="text-red-500 text-center">{message}</p>
                   <div className="w-full flex gap-4 justify-center">
-                    <button className="button-form" onClick={etapa2}>Siguiente</button>
-                    <button className="button-form" onClick={volveretapa1}>Volver</button>
+                    <button className="button-form" onClick={()=>{
+                    etapa2();
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth' // Esto hará que el scroll sea suave
+                    });
+                  }}>Siguiente</button>
+                    <button className="button-form" onClick={()=>{
+                    volveretapa1();
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth' // Esto hará que el scroll sea suave
+                    });
+                  }}>Volver</button>
                   </div>
                 </div>
               )
@@ -318,16 +357,13 @@ const Pay = () => {
               form3 && (
                 <div className="flex flex-col gap-8 justify-center items-center">
                   {
-                    nickname !== "" ?
+                    user_id !== "" ?
                       (<div className="text-center text-profile shadow mt-2 p-4 rounded border-celeste text-gray-700 flex flex-col gap-2 lg:w-1/3">
                         <h5 className="text-xl text-center  title">Logeado</h5>
                         <p className="text-center"><b>Email</b>: {email}</p>
 
                         <div className="lg:items-center">
-                          <button className="lg:w-1/2 p-2 mt-4 rounded w-full  bg-celeste text-white" onClick={() => {
-                            localStorage.removeItem('miToken');
-                            window.location.reload();
-                          }}>Click aquí para cerrar sesión</button>
+                          <button className="lg:w-1/2 p-2 mt-4 rounded w-full  bg-celeste text-white" onClick={() => closeSesion()}>Click aquí para cerrar sesión</button>
                         </div>
                       </div>) :
                       (<div className="text-center mt-2">
@@ -352,7 +388,13 @@ const Pay = () => {
                         <FaCheckCircle className=" text-blue-400" /> <p>Médicos especialistas</p>
                       </div>
 
-                      <button className="bg-celeste p-2 text-white" onClick={changeState1} type="button">Quiero una pregunta</button>
+                      <button className="bg-celeste p-2 text-white" onClick={()=>{
+                        changeState1();
+                        window.scrollTo({
+                          top: 0,
+                          behavior: 'smooth' // Esto hará que el scroll sea suave
+                        });
+                      }} type="button">Quiero una pregunta</button>
                     </div>
 
                     <div className="flex flex-col justify-between w-64 gap-2 lg:border rounded min-h-64 lg:p-4">
@@ -364,14 +406,26 @@ const Pay = () => {
                       <div className="flex gap-2">
                         <FaCheckCircle className=" text-blue-400" /> <p>Médicos especialistas</p>
                       </div>
-                      <button className="bg-celeste p-2 text-white" onClick={changeState2} type="button">Quiero una teleconsulta</button>
+                      <button className="bg-celeste p-2 text-white" onClick={()=>{
+                        changeState2();
+                        window.scrollTo({
+                          top: 0,
+                          behavior: 'smooth' // Esto hará que el scroll sea suave
+                        });
+                      }} type="button">Quiero una teleconsulta</button>
                     </div>
 
 
                   </div>
 
                   <div className="w-full flex justify-center">
-                    <button className="button-form" onClick={volveretapa2}>Volver</button>
+                    <button className="button-form" onClick={()=>{
+                    volveretapa2();
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth' // Esto hará que el scroll sea suave
+                    });
+                  }}>Volver</button>
                   </div>
                 </div>)
             }
@@ -379,7 +433,7 @@ const Pay = () => {
             {
               (login && !logeado && form3) && (
                 <>
-                  <Login state={login} changeState={closeLogin} setInvitado={setInvitado} setLogeado={setLogeado} openRegister={openRegister} />
+                  <Login userInfo={userInfo} state={login} changeState={closeLogin} setLogeado={setLogeado} openRegister={openRegister} />
                   <div className="begin__main-overlay"></div>
                 </>
               )

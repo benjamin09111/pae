@@ -24,8 +24,14 @@ const Profile = () => {
 
     const [user_id, setUserId] = useState("");
 
-    const cerrar_sesion = () => {
+    const closeSesion = () => {
         localStorage.removeItem('miToken');
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('email');
+        localStorage.removeItem('name');
+        localStorage.removeItem('lastname');
+        localStorage.removeItem('age');
+        localStorage.removeItem('country');
         window.location.reload();
     }
 
@@ -110,7 +116,7 @@ const Profile = () => {
                                 <Link to="/begin" className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline`}>Realizar consulta</Link>
 
                                 {
-                                    user_id !== "" && (<p onClick={cerrar_sesion} className="text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline">
+                                    user_id !== "" && (<p onClick={closeSesion()} className="text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline">
                                         Cerrar sesión
                                     </p>)
                                 }

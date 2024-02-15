@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./login.css";
 
-const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) => {
+const Login = ({ state, changeState, setLogeado, openRegister }) => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
 
@@ -26,24 +26,67 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
             body: JSON.stringify(data)
         };
 
-        await fetch('https://api-dev.mimanualdelbebe.com/api/user/login', options)
-            .then(response => response.json())
-            .then(response => {
-                console.log("Te responde: ", response.user)
+        if (user !== "" && password !== "") {
+            await fetch('https://api-dev.mimanualdelbebe.com/api/user/login', options)
+                .then(response => response.json())
+                .then(response => {
+                    if (response.msg == "Error de credenciales!") {
+                        setEstiloText({ color: "red" });
+                        setMessage("Error de credenciales.");
+                    } else if (response.login) {
+                        const token = response.token
+                        const user_id = response.user.id
+                        const user_email = response.user.user_email
+
+                        localStorage.setItem('miToken', JSON.stringify(token));
+                        localStorage.setItem('user_id', JSON.stringify(user_id));
+                        localStorage.setItem('email', user_email);
+
+                        //guardamos en el local directo
+                        localStorage.setItem('name', response.user.wp_usermeta["wpcf_f_name"]);
+                        localStorage.setItem('lastname', response.user.wp_usermeta["wpcf_l_name"]);
+                        localStorage.setItem('age', response.user.wp_usermeta["wpcf_age"]);
+                        localStorage.setItem('country', response.user.wp_usermeta["wpcf_country"]);
+
+                        //cerrar login y ponerle logeado
+                        changeState();
+                        setLogeado(true);
+                    } else {
+                        setEstiloText({ color: "red" });
+                        setMessage("Error desconocido.");
+                    }
+                })
+                .catch(err => {
+                    setEstiloText({ color: "red" });
+                    setMessage("No se ha podido establecer sesión (servidor).");
+                });
+        } else {
+            setEstiloText({ color: "red" });
+            setMessage("Rellene los campos.");
+        }
+
+        /*
                 if (response.msg === "Error de credenciales!") {
                     setEstiloText({ color: "red" });
                     setMessage("Error de credenciales.");
                 } else if (response.token != "") {
                     const token = response.token
                     const user_id = response.user.id
-    
-                    localStorage.setItem('miToken', token)
-                    localStorage.setItem('user_id', user_id)
+                    const user_email = response.user.user_email
+                    
+                    localStorage.setItem('miToken', JSON.stringify(token));
+                    localStorage.setItem('user_id', JSON.stringify(user_id));
+                    localStorage.setItem('email', user_email);
 
+                    //guardamos en el local directo
+                    localStorage.setItem('name', response.user.wp_usermeta["wpcf_f_name"]);
+                    localStorage.setItem('lastname', response.user.wp_usermeta["wpcf_l_name"]);
+                    localStorage.setItem('age', response.user.wp_usermeta["wpcf_age"] );
+                    localStorage.setItem('country', response.user.wp_usermeta["wpcf_country"]);
+
+                    //cerrar login y ponerle logeado
                     changeState();
-                    setInvitado(false);
                     setLogeado(true);
-                    return;
                 } else if (user == "" || password == "") {
                     setEstiloText({ color: "red" });
                     setMessage("Rellene los campos.");
@@ -54,11 +97,8 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
                     setMessage("No se ha podido establecer sesión.");
                     console.log(response)
                 }
-            })
-            .catch(err => {
-                setEstiloText({ color: "red" });
-                setMessage("No se ha podido establecer sesión (servidor).");
-            });
+                */
+
     };
 
     return (
@@ -95,7 +135,6 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
                     className="underline"
                     onClick={() => {
                         changeState();
-                        setInvitado(true);
                     }}
                 >
                     Seguir como invitado

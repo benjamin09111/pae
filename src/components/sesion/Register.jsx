@@ -26,28 +26,30 @@ const Register = ({ setState, style }) => {
         setEstiloText({ color: "black" });
         setMessage("Cargando...");
 
-        const data = dataSend;
-
-        console.log(data);
-
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(dataSend)
         };
 
         if (captchaOK) {
             await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
                 .then(response => response.json())
                 .then(response => {
-                    if (response.id) {
-                        setEstiloText({ color: "blue" });
-                        setMessage("Cuenta creada.");
-                    } else {
+                    if(dataSend["name"] !== "" && dataSend["lastname"] !== "" && dataSend["age"] !== "" && dataSend["country"]!== "" && dataSend["email"] !== "" && dataSend["password"] !== ""){
+                        if (response.id) {
+                            setEstiloText({ color: "blue" });
+                            setMessage("Cuenta creada. Inicie sesión.");
+                        } else {
+                            setEstiloText({ color: "red" });
+                            setMessage("No se ha podido crear la cuenta.");
+                        }
+                    }else{
                         setEstiloText({ color: "red" });
-                        setMessage("No se ha podido crear la cuenta.");
+                        setMessage("Rellene los campos.");
+                        setCaptchaOK(false);
                     }
                 })
                 .catch(err => {
@@ -135,7 +137,7 @@ const Register = ({ setState, style }) => {
 
                 <div className="flex flex-col xl:pt-5 items-center">
                     <div>
-                        <Captcha setCaptchaOK={setCaptchaOK} />
+                        <Captcha setCaptchaOK={setCaptchaOK}/>
                     </div>
 
                     <button className="button-form my-4" onClick={registrarse}>

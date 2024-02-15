@@ -4,6 +4,7 @@ import "../login/login.css";
 
 const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
     const [captchaOK, setCaptchaOK] = useState(false);
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
@@ -45,12 +46,17 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
             await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
                 .then(response => response.json())
                 .then(response => {
-                    if (response.id) {
-                        setEstiloText({ color: "blue" });
-                        setMessage("Cuenta creada.");
-                    } else {
+                    if(name !== "" && lastname!== "" && age!== "" && country!== "" && email!== "" && password!== ""){
+                        if (response.id) {
+                            setEstiloText({ color: "blue" });
+                            setMessage("Cuenta creada. Inicie sesión.");
+                        } else {
+                            setEstiloText({ color: "red" });
+                            setMessage("No se ha podido crear la cuenta.");
+                        }
+                    }else{
                         setEstiloText({ color: "red" });
-                        setMessage("No se ha podido crear la cuenta.");
+                        setMessage("Rellene los campos.");
                     }
                 })
                 .catch(err => {
@@ -124,7 +130,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                     </div>
                 </div>
                 <div className="mt-4">
-                    <Captcha setCaptchaOK={setCaptchaOK} />
+                    <Captcha setCaptchaOK={setCaptchaOK}  />
                 </div>
                 <button className="button-form my-4" onClick={registrarse}>
                     Registrar cuenta

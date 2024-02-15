@@ -37,7 +37,6 @@ class Checkout extends Component {
             execute();
         }else{
             setMessageError("Debe completar los campos.");
-            console.log("Pass1: ", pass1, " Pass2: ", pass2, " Tipo: ", tipo)
         }
     }
 

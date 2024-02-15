@@ -7,14 +7,23 @@ import Input from "./Input"
 import Transbank from "../../components/Transbank"
 import "./styleform.css"
 
-const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, precio, setLogin, userInfo, changeUserInfo, changeState, tipo, dataEmbarazo, dataPostparto, dataBebe, changeEmbarazo, changeBebe, changePostparto }) => {
+const FormularioPago = ({ agregarAutomaticaUsuario, logeado, title, question, precio, setLogin, userInfo, changeUserInfo, changeState, tipo, dataEmbarazo, dataPostparto, dataBebe, changeEmbarazo, changeBebe, changePostparto }) => {
+
+    useEffect(() => {
+        const token = localStorage.getItem('miToken');
+        if (token && logeado) {
+            agregarAutomaticaUsuario("name", localStorage.getItem("name"))
+            agregarAutomaticaUsuario("lastname", localStorage.getItem("lastname"))
+            agregarAutomaticaUsuario("age", localStorage.getItem("age"))
+            agregarAutomaticaUsuario("country", localStorage.getItem("country"))
+            agregarAutomaticaUsuario("email", localStorage.getItem("email"))
+        }
+    }, [])
 
     const [verificado, setVerificado] = useState(false);
     const [textoCodigo, setTextoCodigo] = useState("");
     const [styleText, setStyleText] = useState("style__text-black");
-    const [name, setName] = useState("");
     const [cuppon, setCuppon] = useState("");
-    const [formReady, setFormReady] = useState(true);
 
     //funcion que verifica si es que no ha llegado algo o hay algun error
     const [messageError, setMessageError] = useState("");
@@ -22,36 +31,21 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
     const canjearCodigo = async () => {
         setStyleText("style__text-black")
         setTextoCodigo("Verificando código...");
-
         setTimeout(() => {
+            var aprobado = false;
             // Aquí iría tu lógica de llamada al backend y recibir respuesta
             //la variable del cuppon se llama: cuppon
-            //debes cambiar con setVerificado cuando se verifique, verificado indica si pueda usar cupón
             //sacar el timeout por el await
-
-            if (verificado) {
+            if (aprobado) {
                 setStyleText("style__text-blue");
                 setTextoCodigo("¡Código aprobado!");
+                setVerificado(true);
             } else {
                 setStyleText("style__text-red");
                 setTextoCodigo("Código no aprobado.");
             }
         }, 500);
     };
-
-    useEffect(() => {
-        const token = localStorage.getItem('miToken');
-
-        if (token) {
-            setName(localStorage.getItem('name'));
-            //agregar Info automática al usuario: email, name, lastname, age, country
-            agregarAutomaticaUsuario("email", localStorage.getItem('email'));
-            agregarAutomaticaUsuario("name", localStorage.getItem('name'));
-            agregarAutomaticaUsuario("lastname", localStorage.getItem('lastname'));
-            agregarAutomaticaUsuario("age", localStorage.getItem('age'));
-            agregarAutomaticaUsuario("country", localStorage.getItem('country'));
-        }
-    }, [login])
 
     return (
         <form className="formulario__de__pago flex 2xl:flex-row flex-col justify-evenly items-start pt-8 relative w-full">
@@ -72,7 +66,7 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
             <div className="flex mt-6 2xl:px-0 px-36 w-full 2xl:mt-0 justify-center items-center flex-col gap-3 2xl:w-1/3">
                 <h3 className="font-bold text-center mb-6 text-3xl 2xl:text-start formulario__de__pago-h3">{question ? `Información para tu pregunta` : "Información para la teleconsulta"}</h3>
                 {
-                    name === "" && (
+                    !logeado && (
                         <>
                             <Input name="Nombre madre" userInfo={userInfo.name} changeUserInfo={changeUserInfo} id="name" icon="" />
                             <Input name="Apellido madre" userInfo={userInfo.lastname} changeUserInfo={changeUserInfo} id="lastname" icon="" />
@@ -84,11 +78,11 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                 }
                 {tipo === "embarazo" &&
                     <>
-                        <Input name="Fecha de nacimiento (madre)" userInfo={dataEmbarazo.birthmom} changeUserInfo={changeEmbarazo} id="birthmom" icon="icon-[clarity--date-solid]" placeholder="" />
+                        <Input name="Fecha de nacimiento (madre)" userInfo={dataEmbarazo.birthmom} changeUserInfo={changeEmbarazo} id="birthmom" icon="icon-[clarity--date-solid]" placeholder="Tu respuesta..." />
 
-                        <Input name="Fecha estimada del parto" userInfo={dataEmbarazo.birthdate} changeUserInfo={changeEmbarazo} id="birthdate" icon="icon-[clarity--date-solid]" placeholder="" />
+                        <Input name="Fecha estimada del parto" userInfo={dataEmbarazo.birthdate} changeUserInfo={changeEmbarazo} id="birthdate" icon="icon-[clarity--date-solid]" placeholder="Tu respuesta..." />
 
-                        <Input name="Semanas de embarazo" userInfo={dataEmbarazo.weeks} changeUserInfo={changeEmbarazo} id="weeks" icon="icon-[clarity--date-solid]" placeholder="" />
+                        <Input name="Semanas de embarazo" userInfo={dataEmbarazo.weeks} changeUserInfo={changeEmbarazo} id="weeks" icon="icon-[clarity--date-solid]" placeholder="Tu respuesta..." />
 
                         <Input name="Tipo de embarazo" userInfo={dataEmbarazo.birthtype} changeUserInfo={changeEmbarazo} id="birthtype" icon="icon-[healthicons--pregnant]" placeholder="(simple / múltiple)" />
 
@@ -97,7 +91,7 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                 }
                 {tipo === "bebe" &&
                     <>
-                        <Input name="Fecha de nacimiento (bebé)" userInfo={dataBebe.birthbaby} changeUserInfo={changeBebe} id="birthbaby" icon="icon-[clarity--date-solid]" placeholder="" />
+                        <Input name="Fecha de nacimiento (bebé)" userInfo={dataBebe.birthbaby} changeUserInfo={changeBebe} id="birthbaby" icon="icon-[clarity--date-solid]" placeholder="Tu respuesta..." />
 
                         <Input name="Estatura del bebé" userInfo={dataBebe.babyheight} changeUserInfo={changeBebe} id="babyheight" icon="icon-[mdi--human-male-height]" placeholder="Centímetros (opcional)" />
 
@@ -106,9 +100,9 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                 }
                 {tipo === "postparto" &&
                     <>
-                        <Input name="Fecha último parto" userInfo={dataPostparto.lastbirthdate} changeUserInfo={changePostparto} id="lastbirthdate" icon="icon-[clarity--date-solid]" />
+                        <Input name="Fecha último parto" userInfo={dataPostparto.lastbirthdate} changeUserInfo={changePostparto} id="lastbirthdate" icon="icon-[clarity--date-solid]" placeholder="Tu respuesta..." />
 
-                        <Input name="Tipo de parto" userInfo={dataPostparto.birthtype} changeUserInfo={changePostparto} id="birthtype" icon="icon-[healthicons--pregnant]" />
+                        <Input name="Tipo de parto" userInfo={dataPostparto.birthtype} changeUserInfo={changePostparto} id="birthtype" icon="icon-[healthicons--pregnant]" placeholder="(simple / múltiple)" />
 
                         <Input name="He estado embarazada" userInfo={dataPostparto.pregnantbefore} changeUserInfo={changePostparto} id="pregnantbefore" icon="icon-[healthicons--pregnant]" placeholder="sí / no" />
                     </>
@@ -143,11 +137,24 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                     <p>Vas a pagar un total de <b>${verificado ? 0 : precio}</b></p>
                     <p className="underline text-md">Elige tu método de pago: </p>
 
+                    <button type="button" onClick={
+                        () => {
+                            console.log("Info del usuario: ", userInfo);
+                            if (tipo == "embarazo") {
+                                console.log("Data: ", dataEmbarazo);
+                            } else if (tipo == "postparto") {
+                                console.log("Data: ", dataPostparto);
+                            } else if (tipo == "bebe") {
+                                console.log("Data: ", dataBebe);
+                            }
+                        }
+                    }>Ver Info a Enviar</button>
+
                     <b className="text-red-600">{messageError}</b>
 
-                    <Transbank precio={precio} />
-                    <Checkout tipo={tipo} setMessageError={setMessageError} precio={verificado ? 0 : precio} title={title} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
-
+                    {
+                        //canjear codigo
+                    }
                     <div className="codigo__container">
                         <h5 className="text-md title">Código de invitación</h5>
                         <input
@@ -161,22 +168,39 @@ const FormularioPago = ({ login, agregarAutomaticaUsuario, title, question, prec
                         <p className={styleText}>{textoCodigo}</p>
                     </div>
 
-                    <button className="btnn bg-pink-500 hover:bg-pink-600 w-10/12 md:w-1/3
-                border-none rounded text-white px-4 py-2" onClick={
+                    <button
+                        className={`
+                    ${verificado ?
+                                "btnn bg-pink-500 hover:bg-pink600 w-10/12 md:w-1/3 border-none rounded text-white px-4 py-2"
+                                :
+                                "hidden"
+                            }`}
+                        onClick={
                             () => {
-                                //fetch, si se verifica el código enviado (cuppon), verificado será true ahora
-
-
                                 if (verificado) {
                                     precio = 0;
-                                    //mandar los correos, no se paga
-                                    
+                                    var dataSendExtra;
+                                    const dataUserSend = userInfo;
+
+                                    if(tipo === "embarazo"){
+                                        dataSendExtra = dataEmbarazo;
+                                    }else if(tipo === "postparto"){
+                                        dataSendExtra = dataPostparto;
+                                    }else if(tipo === "bebe"){
+                                        dataSendExtra = dataBebe;
+                                    }
+
+                                    //mandar los correos, no se paga: dataUserSend, dataSendExtra
+
                                 } else {
                                     setMessageError("No has ingresado un código válido.");
                                 }
                             }
                         }><p>Pagar con el <b>código</b></p> </button>
 
+                    <Transbank tipo={tipo} setMessageError={setMessageError} precio={precio} title={title} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
+
+                    <Checkout tipo={tipo} setMessageError={setMessageError} precio={precio} title={title} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
 
                 </div>
             </div>
