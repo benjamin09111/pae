@@ -10,10 +10,10 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
     const [estiloText, setEstiloText] = useState({ color: "black" });
     const myCaptchaRef = React.createRef();
     const logearse = async () => {
-
+        
         setEstiloText({ color: "black" });
         setMessage("Cargando...");
-
+        
         const data = {
             email: user,
             password: password
@@ -25,7 +25,7 @@ const Login = ({ state, changeState, setInvitado, setLogeado, openRegister }) =>
             },
             body: JSON.stringify(data)
         };
-        if(!Object.values(data).some(value => value === ""))
+        if(!Object.values(data).some(value => value === "") || myCaptchaRef.current.getValue())
         await fetch('https://api-dev.mimanualdelbebe.com/api/user/login', options)
             .then(response => response.json())
             .then(response => {

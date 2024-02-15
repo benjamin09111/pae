@@ -1,6 +1,6 @@
 import { useState } from "react";
-import React from "react";
 import ReCaptcha from "../Captcha";
+import React from "react";
 import "../login/login.css";
 
 const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
@@ -9,29 +9,31 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
     const [name, setName] = useState("");
     const [lastname, setLastName] = useState("");
     const [age, setAge] = useState("");
+    const [country, setCountry] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const myCaptchaRef = React.createRef();
-
+    
     const handleTogglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
-
+    
     const [message, setMessage] = useState("");
     const [estiloText, setEstiloText] = useState({ color: "black" });
-
+    
     const registrarse = async () => {
-
+        
         setEstiloText({ color: "black" });
         setMessage("Cargando...");
-
+        
         const data = {
             name: name,
             lastname: lastname,
             age: age,
             email: email,
             password: password,
+            country: country,
         };
-
+        
         const options = {
             method: 'POST',
             headers: {
@@ -39,7 +41,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
             },
             body: JSON.stringify(data)
         };
-            if(!Object.values(data).some(value => value === ""))
+            if(!Object.values(data).some(value => value === "") && myCaptchaRef!=null && myCaptchaRef.current.getValue())
             await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
                 .then(response => response.json())
                 .then(response => {
@@ -47,6 +49,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                         setEstiloText({ color: "blue" });
                         setMessage("Cuenta creada.");
                     } else {
+                        if(myCaptchaRef.current.getValue())
                         myCaptchaRef.current.reset();
                         setEstiloText({ color: "red" });
                         setMessage("No se ha podido crear la cuenta.");
@@ -56,6 +59,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                     myCaptchaRef.current.reset();
                     setEstiloText({ color: "red" });
                     setMessage("No se ha podido crear la cuenta (servidor).");
+                    console.log(err);
                 });
             else{
                 myCaptchaRef.current.reset();
