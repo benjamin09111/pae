@@ -1,4 +1,6 @@
 import { useState } from "react";
+import React from "react";
+import ReCaptcha from "../Captcha";
 import "../login/login.css";
 import Captcha from "../ReCaptcha";
 
@@ -9,6 +11,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
     const [lastname, setLastName] = useState("");
     const [age, setAge] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const myCaptchaRef = React.createRef();
 
     const handleTogglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -37,24 +40,30 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
             },
             body: JSON.stringify(data)
         };
-
-        await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
-            .then(response => response.json())
-            .then(response => {
-                console.log("Enviado: ", data);
-                console.log("Recibido: ", response);
-                if (response && response.id) {
-                    setEstiloText({ color: "blue" });
-                    setMessage("Cuenta creada.");
-                } else {
+            if(!Object.values(data).some(value => value === ""))
+            await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
+                .then(response => response.json())
+                .then(response => {
+                    if (response && response.id) {
+                        setEstiloText({ color: "blue" });
+                        setMessage("Cuenta creada.");
+                    } else {
+                        myCaptchaRef.current.reset();
+                        setEstiloText({ color: "red" });
+                        setMessage("No se ha podido crear la cuenta.");
+                    }
+                })
+                .catch(err => {
+                    myCaptchaRef.current.reset();
                     setEstiloText({ color: "red" });
-                    setMessage("No se ha podido crear la cuenta.");
-                }
-            })
-            .catch(err => {
+                    setMessage("No se ha podido crear la cuenta (servidor).");
+                });
+            else{
+                myCaptchaRef.current.reset();
                 setEstiloText({ color: "red" });
-                setMessage("No se ha podido crear la cuenta (servidor).");
-            });
+                setMessage("Complete todos los campos.");
+            }
+       
     };
 
     return (
@@ -65,6 +74,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                 <div>
                     <p>Nombre</p>
                     <input
+                        required
                         type="text"
                         id="name"
                         name="name"
@@ -75,6 +85,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                 <div>
                     <p>Apellido</p>
                     <input
+                        required
                         type="text"
                         id="lastname"
                         name="lastname"
@@ -95,6 +106,7 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                 <div>
                     <p>Email</p>
                     <input
+                        required
                         type="email"
                         id="email"
                         name="email"
@@ -103,21 +115,37 @@ const Register = ({ state, setRegistrarse, openLogin, changeLogin }) => {
                     />
                 </div>
                 <div>
+                    <p>País</p>
+                    <input
+                        required
+                        type="text"
+                        id="country"
+                        name="country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                    />
+                </div>
+                <div>
                     <p>Contraseña</p>
                     <div style={{ display: "flex", gap: "4" }}>
                         <input
+                            required
                             type={showPassword ? 'text' : 'password'}
                             id="password"
                             name="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)
+                             
+                            }
                         />
                         <button className="relative" onClick={handleTogglePasswordVisibility}>
                             {showPassword ? <span className="absolute left-1 top-0 icon-[mdi--hide-outline]"></span> : <span className="absolute left-1 top-0 icon-[mdi--show-outline]"></span>}
                         </button>
                     </div>
                 </div>
-                <Captcha />
+                <div className="mt-4">
+                    <ReCaptcha CaptchaRef={myCaptchaRef} required/>
+                </div>
                 <button className="button-form my-4" onClick={registrarse}>
                     Registrar cuenta
                 </button>
