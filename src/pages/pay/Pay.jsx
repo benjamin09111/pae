@@ -313,7 +313,8 @@ const Pay = () => {
 
                 </div>
                 <p className="text-red-500 text-center">{message}</p>
-                <div className="w-full flex justify-center">
+                <div className="w-full flex justify-center gap-2">
+                  <a href="/" className="button-form">Volver</a>
                   <button className="button-form" onClick={()=>{
                     etapa1();
                     window.scrollTo({
@@ -335,6 +336,13 @@ const Pay = () => {
 
                   <p className="text-red-500 text-center">{message}</p>
                   <div className="w-full flex gap-4 justify-center">
+                  <button className="button-form" onClick={()=>{
+                    volveretapa1();
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth' // Esto hará que el scroll sea suave
+                    });
+                  }}>Volver</button>
                     <button className="button-form" onClick={()=>{
                     etapa2();
                     window.scrollTo({
@@ -342,13 +350,7 @@ const Pay = () => {
                       behavior: 'smooth' // Esto hará que el scroll sea suave
                     });
                   }}>Siguiente</button>
-                    <button className="button-form" onClick={()=>{
-                    volveretapa1();
-                    window.scrollTo({
-                      top: 0,
-                      behavior: 'smooth' // Esto hará que el scroll sea suave
-                    });
-                  }}>Volver</button>
+                    
                   </div>
                 </div>
               )
@@ -373,12 +375,12 @@ const Pay = () => {
                       </div>)
                   }
 
-                  <h2 className="title text-center text-2xl mt-4 underline">Tipo de servicio</h2>
+                  <h2 className="title text-center text-2xl mt-4 font-semibold">Tipo de servicio</h2>
                   <p className="text-gray-600 text-center">Selecciona el tipo de servicio que más se acomode a ti</p>
 
                   <div className="flex flex-col gap-8 justify-center items-center lg:flex-row lg:items-start lg:gap-20">
 
-                    <div className="flex flex-col justify-between w-64 gap-2 lg:border rounded min-h-64 lg:p-4">
+                    <div className="flex flex-col justify-between p-2 w-64 gap-2 border border-bluecustom rounded min-h-64 lg:p-4">
                       <h3 className="title text-xl">Pregúntale al Doctor</h3>
 
                       <div className="flex gap-2">
@@ -397,7 +399,7 @@ const Pay = () => {
                       }} type="button">Quiero una pregunta</button>
                     </div>
 
-                    <div className="flex flex-col justify-between w-64 gap-2 lg:border rounded min-h-64 lg:p-4">
+                    <div className="flex flex-col justify-between w-64 gap-2 p-2 border border-bluecustom rounded min-h-64 lg:p-4">
                       <h3 className="title text-xl">Teleconsulta</h3>
 
                       <div className="flex gap-2">

@@ -62,6 +62,7 @@
     border: none;
     outline: 1px solid var(--celeste-color);
     border-radius: 5px;
+    width: 100%;
 }
 
 .codigo__container {
@@ -70,6 +71,7 @@
     justify-content: center;
     align-items: center;
     gap: .5rem;
+    width: 100%;
 }
 
 .codigo__container input {

@@ -2,7 +2,7 @@ import images from "../../assets/sintoms"
 
 const SintomasContainer = ({ tipo, sintomas, changeState }) => {
     return (
-        <article className="flex flex-wrap w-3/4 items-center justify-center gap-6 md:flex-row md:flex-wrap md:items-start">
+        <article className="flex flex-wrap xl:w-1/2 items-center justify-center gap-6 md:items-start">
     {sintomas.map((sintoma, index) => (
         <div className="form1__contenedor p-4 flex flex-col items-center justify-center gap-2" key={index} style={{ height: "15rem", width: "20rem" }}>
             <div>

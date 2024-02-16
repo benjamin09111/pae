@@ -68,6 +68,8 @@ const Profile = () => {
                                     )
                                 }
 
+<p onClick={() => setState("crear_cupones")} className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline ${state == "crear_cupones" && "text-pink-500"}`}>Crear cupones</p>
+
                                 <Link to="/begin" className={`text-gray-800 flex gap-2 items-center w-2/3 justify-between cursor-pointer hover:underline`}>Realizar consulta</Link>
 
                                 {

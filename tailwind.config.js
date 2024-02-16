@@ -13,6 +13,7 @@ export default {
       },
       borderColor: {
         'custom': 'rgba(60, 30, 12, 0.277)',
+        "bluecustom" : "rgb(85, 187, 210)"
       },
       textColor: {
         'custom': 'rgb(85, 187, 210)',
