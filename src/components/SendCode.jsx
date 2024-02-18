@@ -1,9 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 import "./send.css"
 
 const SendCode = ({dataSend, userInfo, code, question, setShowSend}) => {
+    const [cargando, setCargando] = useState(false);
     const enviarData = async(e) =>{
         e.preventDefault();
+
+        setCargando(true);
         
         const data = {
             code: code, 
@@ -22,8 +25,8 @@ const SendCode = ({dataSend, userInfo, code, question, setShowSend}) => {
         await fetch('https://api-dev.mimanualdelbebe.com/api/promocodes/status-code', options)
                 .then(response => response.json())
                 .then(response => {
-                    console.log(response);
                     if(response.status === 1){
+                        setCargando(false);
                         window.location.href = `/thanksC${question ? "p" : "t"}`;
                     }else{
                         window.location.href = `/error`;
@@ -43,6 +46,10 @@ const SendCode = ({dataSend, userInfo, code, question, setShowSend}) => {
             <button className='p-2 bg-celeste w-full rounded text-white' onClick={()=>{
                 setShowSend(false);
             }}>Rechazar</button>
+
+            {
+                cargando && (<p className='text-lg text-white'>Cargando...</p>)
+            }
             
         </div>
         <div className='overlay__send'></div>
