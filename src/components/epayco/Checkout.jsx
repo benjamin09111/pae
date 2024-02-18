@@ -5,6 +5,8 @@ class Checkout extends Component {
     openCheckout = async (e) => {
         e.preventDefault();
 
+        const { title, precio, question, userInfo, dataSend, setMessageError } = this.props;
+
         var handler = window.ePayco.checkout.configure({
             key: '2a99b7a8944c88321bb6c8166500c81e',
             test: true
@@ -17,17 +19,13 @@ class Checkout extends Component {
                 currency: "usd",
                 amount: precio,
                 country: "co",
-                confirmation: "https://api-dev.mimanualdelbebe.com/api/pae/confirmation",
-                response: "",
-                extra1: JSON.stringify(userInfo),
-                extra2: JSON.stringify(dataSend)
+                confirmation: "https://api-dev.mimanualdelbebe.com/api/epayco/confirm-payment",
+                response: `${question ? "http://localhost:5173/thanksp" : "http://localhost:5173/thankst"}?dataSend=${encodeURIComponent(JSON.stringify(dataSend))}&userInfo=${encodeURIComponent(JSON.stringify(userInfo))}`,
             };
             handler.open(data);
         }
 
         var pass1, pass2;
-
-        const { title, precio, question, tipo, userInfo, dataSend, setMessageError } = this.props;
 
         pass1 = (Object.values(dataSend).some(value => value === ""));
 

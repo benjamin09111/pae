@@ -10,6 +10,11 @@ const PaymentComponent = ({ precio, userInfo, dataSend, setMessageError }) => {
         const min = 1000;
         const max = 9000;
         const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+
+        localStorage.setItem("dataSend", JSON.stringify(dataSend));
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        localStorage.setItem("question", true);
+
         try {
             const response = await axios.post('https://api-dev.mimanualdelbebe.com/api/transbank/initiate-payment', {
                 buy_order: randomNumber,
@@ -22,6 +27,9 @@ const PaymentComponent = ({ precio, userInfo, dataSend, setMessageError }) => {
             window.location.href = url
         }
         catch (error) {
+            localStorage.removeItem("dataSend");
+            localStorage.removeItem("userInfo");
+            localStorage.removeItem("question");
             setError('Error al iniciar el pago, inténtalo de nuevo');
             console.log(error)
         }
@@ -32,13 +40,8 @@ const PaymentComponent = ({ precio, userInfo, dataSend, setMessageError }) => {
 
         var pass2 = (Object.values(userInfo).some(value => value === ""));
 
-        if (!pass1 && !pass2) {
+        if (!pass1 && !pass2) { //comienza, la info está rellenada
             initiatePayment();
-
-            //hay que enviar la información luego de procesar el pago: dataSend, userInfo
-
-
-
         } else {
             setMessageError("Debe completar los campos.");
         }

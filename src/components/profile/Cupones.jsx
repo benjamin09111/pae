@@ -6,7 +6,7 @@ const Cupones = ({changeState}) => {
     const [message, setMessage] = useState("");
 
     const getCodes = async () => {
-        const token = localStorage.getItem("miToken").slice(1, localStorage.getItem("miToken").length-1);
+        const token = localStorage.getItem("miToken")
         const options = {
             method: 'GET',
             headers: {
@@ -32,7 +32,10 @@ const Cupones = ({changeState}) => {
 
     const enviar = async () => {
         //enviar código de descuento
-        const token = localStorage.getItem("miToken").slice(1, localStorage.getItem("miToken").length-1);
+        const token = localStorage.getItem("miToken")
+
+        console.log(token)
+
         const options = {
             method: 'POST',
             headers: {
@@ -44,6 +47,7 @@ const Cupones = ({changeState}) => {
         await fetch('https://api-dev.mimanualdelbebe.com/api/pae/createPromocode', options)
             .then(response => response.json())
             .then(response => {
+                console.log(response);
                 if(response.msg == "token no es válido"){
                     changeState("vuelva");
                 }else if(response.id){

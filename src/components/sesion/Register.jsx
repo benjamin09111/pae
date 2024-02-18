@@ -36,10 +36,13 @@ const Register = ({ setState, style }) => {
             body: JSON.stringify(dataSend)
         };
 
+/*
         if (!Object.values(dataSend).some(value => value === "") && myCaptchaRef != null && myCaptchaRef.current.getValue()) {
+*/
             await fetch('https://api-dev.mimanualdelbebe.com/api/user/register', options)
                 .then(response => response.json())
                 .then(response => {
+                    console.log(response);
                     if (response.id) {
                         setEstiloText({ color: "blue" });
                         setMessage("Cuenta creada. Inicie sesión.");
@@ -55,11 +58,6 @@ const Register = ({ setState, style }) => {
                     setEstiloText({ color: "red" });
                     setMessage("No se ha podido crear la cuenta.");
                 });
-        } else {
-            myCaptchaRef.current.reset();
-            setEstiloText({ color: "red" });
-            setMessage("Complete todos los campos.");
-        }
     };
 
     return (

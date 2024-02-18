@@ -4,6 +4,10 @@ import Loading from './Loading'
 import Home from "./pages/Home"
 import Profile from "./pages/Profile"
 import { ThanksP, ThanksT } from "./pages/Thanks"
+import ThanksCP from "./pages/thanksCode/Preg";
+import ThanksCT from "./pages/thanksCode/Tel";
+import Error from "./pages/Error"
+import ThanksTsbk from './pages/ThanksTsbk'
 const Pay = lazy(() => import('./pages/pay/Pay'));
 const Page404 = lazy(() => import('./pages/Page404'));
 
@@ -50,6 +54,10 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="thanksp"  element={<ThanksP />} />
             <Route path="thankst" element={<ThanksT />} />
+            <Route path="thanksCp"  element={<ThanksCP />} />
+            <Route path="thanksCt"  element={<ThanksCT />} />
+            <Route path="thanksTbk" element={<ThanksTsbk />} />
+            <Route path="error" element={<Error />} />
             <Route path="*" element={<Page404 />} />
           </Routes>
         </BrowserRouter>

@@ -1,0 +1,11 @@
+.sendcode__container {
+    transform: translate(-50%, -50%);
+}
+
+.overlay__send {
+    width: 100vw;
+    height: 100vw;
+    position: fixed;
+    z-index: 9555;
+    background: black;
+}

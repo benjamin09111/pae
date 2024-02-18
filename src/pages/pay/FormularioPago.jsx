@@ -5,6 +5,7 @@ import postparto from "../../assets/postparto_1.webp"
 import Checkout from "../../components/epayco/Checkout"
 import Input from "./Input"
 import Transbank from "../../components/Transbank"
+import SendCode from "../../components/SendCode"
 import "./styleform.css"
 
 const FormularioPago = ({ agregarAutomaticaUsuario, logeado, title, question, precio, setLogin, userInfo, changeUserInfo, changeState, tipo, dataEmbarazo, dataPostparto, dataBebe, changeEmbarazo, changeBebe, changePostparto }) => {
@@ -20,6 +21,8 @@ const FormularioPago = ({ agregarAutomaticaUsuario, logeado, title, question, pr
         }
     }, [])
 
+    const [showSend, setShowSend] = useState(false);
+
     const [verificado, setVerificado] = useState(false);
     const [textoCodigo, setTextoCodigo] = useState("");
     const [styleText, setStyleText] = useState("style__text-black");
@@ -31,21 +34,45 @@ const FormularioPago = ({ agregarAutomaticaUsuario, logeado, title, question, pr
     const canjearCodigo = async () => {
         setStyleText("style__text-black")
         setTextoCodigo("Verificando código...");
-        setTimeout(() => {
-            var aprobado = false;
-            // Aquí iría tu lógica de llamada al backend y recibir respuesta
-            //la variable del cuppon se llama: cuppon
-            //sacar el timeout por el await
-            if (aprobado) {
-                setStyleText("style__text-blue");
-                setTextoCodigo("¡Código aprobado!");
-                setVerificado(true);
-            } else {
-                setStyleText("style__text-red");
-                setTextoCodigo("Código no aprobado.");
-            }
-        }, 500);
-    };
+
+        const data = {
+            "code": cuppon
+        };
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+
+        await fetch('https://api-dev.mimanualdelbebe.com/api/promocodes/confirm-code', options)
+            .then(response => response.json())
+            .then(response => {
+                console.log(response);
+
+                if (response.status === 1) {
+                    setStyleText("style__text-red")
+                    setTextoCodigo("Código aprobado!")
+                    setVerificado(true);
+                    setShowSend(true);
+                } else {
+                    setStyleText("style__text-red")
+                    setTextoCodigo("Código incorrecto")
+                }
+
+                
+            })
+            .catch(err => {
+                console.log(response);
+                setStyleText("style__text-red")
+                setTextoCodigo("Error!")
+            });
+
+            
+        
+    }
 
     return (
         <form className="formulario__de__pago flex flex-col justify-evenly items-center  pt-8 relative w-full">
@@ -157,35 +184,11 @@ const FormularioPago = ({ agregarAutomaticaUsuario, logeado, title, question, pr
                         <p className={styleText}>{textoCodigo}</p>
                     </div>
 
-                    <button
-                        className={`
-                    ${verificado ?
-                                "btnn bg-pink-500 hover:bg-pink600 w-10/12 md:w-1/3 border-none rounded text-white px-4 py-2"
-                                :
-                                "hidden"
-                            }`}
-                        onClick={
-                            () => {
-                                if (verificado) {
-                                    precio = 0;
-                                    var dataSendExtra;
-                                    const dataUserSend = userInfo;
-
-                                    if (tipo === "embarazo") {
-                                        dataSendExtra = dataEmbarazo;
-                                    } else if (tipo === "postparto") {
-                                        dataSendExtra = dataPostparto;
-                                    } else if (tipo === "bebe") {
-                                        dataSendExtra = dataBebe;
-                                    }
-
-                                    //mandar los correos, no se paga: dataUserSend, dataSendExtra
-
-                                } else {
-                                    setMessageError("No has ingresado un código válido.");
-                                }
-                            }
-                        }><p>Pagar con el <b>código</b></p> </button>
+                    {
+                        (verificado && showSend)  && (
+                            <SendCode setShowSend={setShowSend} question={question} code={cuppon} userInfo={userInfo} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} />
+                        )
+                    }
 
                     <Transbank tipo={tipo} setMessageError={setMessageError} precio={precio} title={title} dataSend={tipo === "embarazo" ? dataEmbarazo : (tipo === "bebe" ? dataBebe : dataPostparto)} userInfo={userInfo} question={question} />
 
