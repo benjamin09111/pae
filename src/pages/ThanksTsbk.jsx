@@ -33,9 +33,9 @@ const ThanksTsbk = () => {
 
                 fetch(`https://api-dev.mimanualdelbebe.com/api/transbank/status-payment/${refTransbank}`, options)
                     .then(response => response.json())
-                    .then(responseData => {
-                        console.log(responseData);
-                        if (responseData.status === 1) {
+                    .then(response => {
+                        console.log(response);
+                        if (response.status === 1) {
                             setAprobado(true);
                         } else {
                             setRechazado(true);
