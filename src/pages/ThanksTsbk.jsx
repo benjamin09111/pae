@@ -12,10 +12,10 @@ const ThanksTsbk = () => {
     useEffect(async () => {
         const location = useLocation();
         const searchParams = new URLSearchParams(location.search);
-        const refPayco = searchParams.get('ref_payco');
+        const refTransbank = searchParams.get('token');
 
         //para transbank, la data se saca del localStorage
-        if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend") && refPayco) {
+        if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend") && refTransbank) {
             if (localStorage.getItem("question")) {
                 setQuestion(true);
             }
@@ -30,7 +30,7 @@ const ThanksTsbk = () => {
                 })
             };
 
-            await fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refPayco}`, options)
+            await fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refTransbank}`, options)
                 .then(response => response.json())
                 .then(response => {
                     if (response.status === 1) {
