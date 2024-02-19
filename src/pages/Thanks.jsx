@@ -1,90 +1,91 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from "../assets/logo-1.png";
 import "./pages.css"
 
-//funcion que ejecuta la lógica: recibir data y enviar para correos. Pago realizado
-const functionData = async(setAprobado, setRechazado) => {
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const refPayco = searchParams.get('ref_payco');
-
-    //para transbank, la data se saca del localStorage
-    if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend")) {
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                userInfo: localStorage.getItem("userInfo"),
-                consulta: localStorage.getItem("dataSend")
-            })
-        };
-
-        await fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refPayco}`, options)
-            .then(response => response.json())
-            .then(response => {
-                if (response.status === 1) {
-                    setAprobado(true);
-                } else {
-                    setRechazado(true);
-                }
-            })
-            .catch(err => {
-                setRechazado(true);
-                console.log("Error!")
-            });
-    } 
-    //para epayco, se recibe todo en la url
-    else {
-        const dataSendString = searchParams.get('dataSend');
-        const userInfoString = searchParams.get('userInfo');
-        const dataSend = JSON.parse(decodeURIComponent(dataSendString));
-        const userInfo = JSON.parse(decodeURIComponent(userInfoString));
-        
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                userInfo: userInfo,
-                consulta: dataSend
-            })
-        };
-
-        await fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refPayco}`, options)
-            .then(response => response.json())
-            .then(response => {
-                if (response.status === 1) {
-                    setAprobado(true);
-                } else {
-                    setRechazado(true);
-                }
-            })
-            .catch(err => {
-                setRechazado(true);
-                console.log("Error!")
-            });
-    }
-}
-
-//funcion que elimina la data del localStorage
-const deleteData = () => {
-    if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend")){
-        localStorage.removeItem("dataSend");
-        localStorage.removeItem("userInfo");
-    }
-}
+/*
+    Algo que se puede hacer es elimiar el if de la función, ya que este componente
+    se usa solo para epayco, así que no es necesario hacer el if viendo
+    si hay algo en el localStorage
+*/
 
 const ThanksT = () => {
     const [aprobado, setAprobado] = useState(false);
     const [rechazado, setRechazado] = useState(false);
+    const location = useLocation();
 
-    useEffect(async () => {
-        functionData(setAprobado, setRechazado);
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const refPayco = searchParams.get('ref_payco');
+
+        //para transbank, la data se saca del localStorage
+        if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend")) {
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userInfo: localStorage.getItem("userInfo"),
+                    consulta: localStorage.getItem("dataSend")
+                })
+            };
+
+            fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refPayco}`, options)
+                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 1) {
+                        setAprobado(true);
+                    } else {
+                        setRechazado(true);
+                    }
+                })
+                .catch(err => {
+                    setRechazado(true);
+                    console.log("Error!")
+                });
+        } 
+        //para epayco, se recibe todo en la url
+        else {
+            const dataSendString = searchParams.get('dataSend');
+            const userInfoString = searchParams.get('userInfo');
+            const dataSend = JSON.parse(decodeURIComponent(dataSendString));
+            const userInfo = JSON.parse(decodeURIComponent(userInfoString));
+            
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userInfo: userInfo,
+                    consulta: dataSend
+                })
+            };
+
+            fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refPayco}`, options)
+                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 1) {
+                        setAprobado(true);
+                    } else {
+                        setRechazado(true);
+                    }
+                })
+                .catch(err => {
+                    setRechazado(true);
+                    console.log("Error!")
+                });
+        }
     }, []);
+
+    //funcion que elimina la data del localStorage
+    const deleteData = () => {
+        if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend")){
+            localStorage.removeItem("dataSend");
+            localStorage.removeItem("userInfo");
+        }
+    }
 
     return (
         <div className='thanks__container gap-2 flex justify-center items-center flex-col'>
@@ -120,10 +121,80 @@ const ThanksT = () => {
 const ThanksP = () => {
     const [aprobado, setAprobado] = useState(false);
     const [rechazado, setRechazado] = useState(false);
+    const location = useLocation();
 
-    useEffect(async () => {
-        functionData(setAprobado, setRechazado);
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const refPayco = searchParams.get('ref_payco');
+
+        //para transbank, la data se saca del localStorage
+        if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend")) {
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userInfo: localStorage.getItem("userInfo"),
+                    consulta: localStorage.getItem("dataSend")
+                })
+            };
+
+            fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refPayco}`, options)
+                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 1) {
+                        setAprobado(true);
+                    } else {
+                        setRechazado(true);
+                    }
+                })
+                .catch(err => {
+                    setRechazado(true);
+                    console.log("Error!")
+                });
+        } 
+        //para epayco, se recibe todo en la url
+        else {
+            const dataSendString = searchParams.get('dataSend');
+            const userInfoString = searchParams.get('userInfo');
+            const dataSend = JSON.parse(decodeURIComponent(dataSendString));
+            const userInfo = JSON.parse(decodeURIComponent(userInfoString));
+            
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userInfo: userInfo,
+                    consulta: dataSend
+                })
+            };
+
+            fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refPayco}`, options)
+                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 1) {
+                        setAprobado(true);
+                    } else {
+                        setRechazado(true);
+                    }
+                })
+                .catch(err => {
+                    setRechazado(true);
+                    console.log("Error!")
+                });
+        }
     }, []);
+
+    //funcion que elimina la data del localStorage
+    const deleteData = () => {
+        if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend")){
+            localStorage.removeItem("dataSend");
+            localStorage.removeItem("userInfo");
+        }
+    }
 
     return (
         <div className='thanks__container gap-2 flex justify-center items-center flex-col'>

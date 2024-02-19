@@ -20,7 +20,7 @@ class Checkout extends Component {
                 amount: precio,
                 country: "co",
                 confirmation: "https://api-dev.mimanualdelbebe.com/api/epayco/confirm-payment",
-                response: `${question ? "http://localhost:5173/thanksp" : "http://localhost:5173/thankst"}?dataSend=${encodeURIComponent(JSON.stringify(dataSend))}&userInfo=${encodeURIComponent(JSON.stringify(userInfo))}`,
+                response: `${question ? "https://newpae.mimanualdelbebe.com/thanksp" : "https://newpae.mimanualdelbebe.com/thankst"}?dataSend=${encodeURIComponent(JSON.stringify(dataSend))}&userInfo=${encodeURIComponent(JSON.stringify(userInfo))}`,
             };
             handler.open(data);
         }
