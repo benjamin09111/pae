@@ -9,8 +9,7 @@ const ThanksTsbk = () => {
     const [question, setQuestion] = useState(false);
     const location = useLocation();
 
-    useEffect(() => {
-        const functionData = async () => {
+    useEffect(async() => {
             const searchParams = new URLSearchParams(location.search);
             const refPayco = searchParams.get('ref_payco');
 
@@ -30,9 +29,6 @@ const ThanksTsbk = () => {
                     })
                 };
 
-                console.log(localStorage.getItem("userInfo"));
-                console.log(localStorage.getItem("dataSend"));
-
                 await fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refPayco}`, options)
                     .then(response => response.json())
                     .then(response => {
@@ -51,10 +47,7 @@ const ThanksTsbk = () => {
                 setRechazado(true);
                 console.log("Error!")
             }
-        }
-
-        functionData();
-    }, [location.search]);
+    }, []);
 
     //funcion que elimina la data del localStorage
     const deleteData = () => {
