@@ -8,46 +8,51 @@ const ThanksTsbk = () => {
     const [rechazado, setRechazado] = useState(false);
     const [question, setQuestion] = useState(false);
 
+    useEffect(() => {
+        const fetchData = () => {
+            const location = useLocation();
+            const searchParams = new URLSearchParams(location.search);
+            const refTransbank = searchParams.get('token');
 
-    useEffect(async () => {
-        const location = useLocation();
-        const searchParams = new URLSearchParams(location.search);
-        const refTransbank = searchParams.get('token');
-
-        //para transbank, la data se saca del localStorage
-        if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend") && refTransbank) {
-            if (localStorage.getItem("question")) {
-                setQuestion(true);
-            }
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
+            //para transbank, la data se saca del localStorage
+            if (localStorage.getItem("userInfo") && localStorage.getItem("dataSend") && refTransbank) {
+                if (localStorage.getItem("question")) {
+                    setQuestion(true);
+                }
+                const data = {
                     userInfo: localStorage.getItem("userInfo"),
                     consulta: localStorage.getItem("dataSend")
-                })
-            };
+                }
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: data
+                };
 
-            await fetch(`https://api-dev.mimanualdelbebe.com/api/epayco/status-payment/${refTransbank}`, options)
-                .then(response => response.json())
-                .then(response => {
-                    if (response.status === 1) {
-                        setAprobado(true);
-                    } else {
+                fetch(`https://api-dev.mimanualdelbebe.com/api/transbank/status-payment/${refTransbank}`, options)
+                    .then(response => response.json())
+                    .then(responseData => {
+                        console.log(responseData);
+                        if (responseData.status === 1) {
+                            setAprobado(true);
+                        } else {
+                            setRechazado(true);
+                        }
+                    })
+                    .catch(err => {
                         setRechazado(true);
-                    }
-                })
-                .catch(err => {
-                    setRechazado(true);
-                    console.log("Error!")
-                });
-        }
-        else {
-            setRechazado(true);
-            console.log("Error!")
-        }
+                        console.log("Error!: ", err)
+                    });
+            }
+            else {
+                setRechazado(true);
+                console.log("Error!")
+            }
+        };
+
+        fetchData();
     }, []);
 
     //funcion que elimina la data del localStorage
